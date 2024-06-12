@@ -1,4 +1,4 @@
-#include "FenDL/ActivateFunctions/LReLU.hxx"
+#include "Venio/ActivateFunctions/LReLU.hxx"
 double LReLU::getActivateValue(double value) {
     if(value >= 0)
         return value;

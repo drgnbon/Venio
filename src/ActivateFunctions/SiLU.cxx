@@ -1,4 +1,4 @@
-#include "FenDL/ActivateFunctions/SiLU.hxx"
+#include "Venio/ActivateFunctions/SiLU.hxx"
 double SiLU::getActivateValue(double value) {
     return value * (1.0 / (1.0 + exp(-value) ));
 }

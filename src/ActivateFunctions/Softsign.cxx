@@ -1,4 +1,4 @@
-#include "FenDL/ActivateFunctions/Softsign.hxx"
+#include "Venio/ActivateFunctions/Softsign.hxx"
 double Softsign::getActivateValue(double value) {
     return value/(1+abs(value));
 }

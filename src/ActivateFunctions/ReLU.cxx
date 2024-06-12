@@ -1,4 +1,4 @@
-#include "FenDL/ActivateFunctions/ReLU.hxx"
+#include "Venio/ActivateFunctions/ReLU.hxx"
 
 double ReLU::getActivateValue(double value) {
 	return fmax(0,value);

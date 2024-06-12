@@ -1,4 +1,4 @@
-#include "FenDL/ActivateFunctions/SoftPlus.hxx"
+#include "Venio/ActivateFunctions/SoftPlus.hxx"
 double SoftPlus::getActivateValue(double value) {
     return log(1+exp(value));
 }

@@ -1,4 +1,4 @@
-#include "FenDL/Optimizers/GD.hxx"
+#include "Venio/Optimizers/GD.hxx"
 
 void GD::updateWeights(Matrixd answer,std::shared_ptr<LossFunction> _loss_function,double learning_speed = 0.5,double epoch = 1) {
 

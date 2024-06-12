@@ -2,7 +2,7 @@
 // Created by Andrey on 17.03.2024.
 //
 
-#include "FenDL/Logging.hxx"
+#include "Venio/Logging.hxx"
 
 void Logging::Log(TrainerStrategy& ts){
 

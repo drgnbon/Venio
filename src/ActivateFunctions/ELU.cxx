@@ -1,4 +1,4 @@
-#include "FenDL/ActivateFunctions/ELU.hxx"
+#include "Venio/ActivateFunctions/ELU.hxx"
 double ELU::getActivateValue(double value) {
     if (value >= 0)
         return 1;

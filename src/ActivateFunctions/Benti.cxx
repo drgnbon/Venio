@@ -1,4 +1,4 @@
-#include "FenDL/ActivateFunctions/Benti.hxx"
+#include "Venio/ActivateFunctions/Benti.hxx"
 
 double Benti::getActivateValue(double value) {
     return ((sqrt((value * value) + 1) - 1) / 2) + value;

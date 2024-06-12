@@ -1,4 +1,4 @@
-#include "FenDL/NeuralNetwork.hxx"
+#include "Venio/NeuralNetwork.hxx"
 #include <fstream>
 
 NeuralNetwork::NeuralNetwork()

@@ -1,4 +1,4 @@
-#include "FenDL/ActivateFunctions/Sin.hxx"
+#include "Venio/ActivateFunctions/Sin.hxx"
 double Sin::getActivateValue(double value) {
     return sin(value);
 }

@@ -1,4 +1,4 @@
-#include "FenDL/LossFunctions/SquareError.hxx"
+#include "Venio/LossFunctions/SquareError.hxx"
 
 #include <iostream>
 double SquareError::getMediumLoss(Matrixd active_value,Matrixd right_answer)

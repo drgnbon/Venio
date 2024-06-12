@@ -1,4 +1,4 @@
-#include "FenDL/Optimizers/Adagrad.hxx"
+#include "Venio/Optimizers/Adagrad.hxx"
 
 Adagrad::Adagrad(NeuralNetwork &network) : Optimizer(network)
 {

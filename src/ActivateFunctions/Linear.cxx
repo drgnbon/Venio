@@ -1,4 +1,4 @@
-#include "FenDL/ActivateFunctions/Linear.hxx"
+#include "Venio/ActivateFunctions/Linear.hxx"
 double Linear::getActivateValue(double value) {
     return value;
 }

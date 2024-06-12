@@ -1,4 +1,4 @@
-#include "FenDL/ActivateFunctions/Sinc.hxx"
+#include "Venio/ActivateFunctions/Sinc.hxx"
 double Sinc::getActivateValue(double value) {
     if(value == 0)
         return 1;

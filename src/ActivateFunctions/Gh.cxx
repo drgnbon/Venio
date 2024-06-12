@@ -1,4 +1,4 @@
-#include "FenDL/ActivateFunctions/Gh.hxx"
+#include "Venio/ActivateFunctions/Gh.hxx"
 double Gh::getActivateValue(double value) {
     return exp(-(value*value));
 }

@@ -1,4 +1,4 @@
-#include "FenDL/ActivateFunctions/SELU.hxx"
+#include "Venio/ActivateFunctions/SELU.hxx"
 double SELU::getActivateValue(double value) {
     if (value >= 0)
         return value * 1.0507;
