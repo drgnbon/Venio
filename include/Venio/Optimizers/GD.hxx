@@ -1,7 +1,7 @@
 #ifndef FENDL_GD_HXX
 #define FENDL_GD_HXX
 
-#include <FenDL/Optimizer.hxx>
+#include <Venio/Optimizer.hxx>
 
 class GD : public Optimizer {
 public:
