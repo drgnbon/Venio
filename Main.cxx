@@ -1,4 +1,4 @@
-#include <Eigen/Core>
+#include <Eigen>
 #include <iostream>
 
 int main()
