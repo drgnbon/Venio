@@ -2,7 +2,9 @@
 #include <Venio/Venio.hxx>
 
 int main() {
-    Eigen::setNbThreads(6);
+
+  Eigen::setNbThreads(6);
+  
   NeuralNetwork network;
   network.setLayers<PerceptronLayer>({10000,5,2});
   network.setActivationFunction<Sinc>();
