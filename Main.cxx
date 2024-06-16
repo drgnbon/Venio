@@ -133,6 +133,7 @@ public:
         _active_values = Matrixd::Zero(1, _layer_size);
         _values = Matrixd::Zero(1, _layer_size);
         _bias = Matrixd::Random(1, _layer_size);
+        _bias_gradient = Matrixd::Zero(1,_layer_size);
         _derivation_neurons = Matrixd::Zero(1, _layer_size);
     }
 
@@ -203,6 +204,7 @@ public:
 
         _derivation_neurons = next_layer_derivation * _weights.transpose();
         _weights_gradient = _active_values.transpose() * next_layer_derivation;
+        _bias_gradient = _derivation_neurons;
     }
 
 
