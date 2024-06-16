@@ -15,19 +15,18 @@ typedef Eigen::MatrixXd Matrixd;
 
 
 //ActivationFunctions---------------------------------------------------------------------------------------------------
-class ActivationFunction
-        {
-        public:
+class ActivationFunction{
+public:
     ActivationFunction() = default;
     ~ActivationFunction() = default;
 
-    virtual double getActivateValue(double x) = 0;
+    virtual double getActiveValue(double x) = 0;
     virtual double getDerivateValue(double x) = 0;
 
-    Matrixd getActivateMatrix(Matrixd matrix) {
+    Matrixd getActiveMatrix(Matrixd matrix) {
         for (int i = 0; i < matrix.rows(); ++i) {
             for (int j = 0; j < matrix.cols(); ++j) {
-                matrix(i, j) = getActivateValue(matrix(i, j));
+                matrix(i, j) = getActiveValue(matrix(i, j));
             }
         }
         return matrix;
@@ -41,12 +40,11 @@ class ActivationFunction
         }
         return matrix;
     }
-        };
+};
 
-class LogisticFunction : public ActivationFunction
-        {
-        public:
-    double getActivateValue(double x) override
+class LogisticFunction : public ActivationFunction{
+public:
+    double getActiveValue(double x) override
     {
         return 1.0 / (1.0 + exp(-x) );
     }
@@ -55,12 +53,24 @@ class LogisticFunction : public ActivationFunction
     {
         return (1.0 / (1.0 + exp(-x) ))*(1 - (1.0 / (1.0 + exp(-x) )));
     }
-        };
+};
 
-class SoftSignFunction : public ActivationFunction
-        {
-        public:
-    double getActivateValue(double x) override
+class LinearFunction : public ActivationFunction{
+public:
+    double getActiveValue(double x) override
+    {
+        return x;
+    }
+
+    double getDerivateValue(double x) override
+    {
+        return 1;
+    }
+};
+
+class SoftSignFunction : public ActivationFunction{
+public:
+    double getActiveValue(double x) override
     {
         return x/(1+abs(x));
     }
@@ -69,20 +79,20 @@ class SoftSignFunction : public ActivationFunction
     {
         return 1/pow(1+abs(x),2);
     }
-        };
+};
 //ActivationFunctions---------------------------------------------------------------------------------------------------
 
 //LossFunctions---------------------------------------------------------------------------------------------------------
-class LossFunction
-        {
-        public:
+class LossFunction{
+public:
     virtual double getMediumLoss(Matrixd active_value,Matrixd right_answer) = 0;
     virtual Matrixd getDerivationLoss(Matrixd active_value,Matrixd right_answer) = 0;
-        };
+};
 
-class SquareErrorFunction : public LossFunction
-        {
-        public:
+class SquareErrorFunction : public LossFunction{
+public:
+
+
     double getMediumLoss(Matrixd active_value,Matrixd right_answer) override
     {
         double SquareError = 0;
@@ -91,20 +101,20 @@ class SquareErrorFunction : public LossFunction
                 SquareError += (active_value(i, j) - right_answer(i, j)) * (active_value(i, j) - right_answer(i, j));
         return SquareError;
     }
+    //Probably warning---------------------------
     Matrixd getDerivationLoss(Matrixd active_value,Matrixd right_answer) override
     {
         return  2*(active_value-right_answer);
     }
-        };
+};
 
 //LossFunctions---------------------------------------------------------------------------------------------------------
 
 
 
 //Layers----------------------------------------------------------------------------------------------------------------
-class Layer
-        {
-        public:
+class Layer{
+public:
     int _layer_size;
     Matrixd _values;
     ActivationFunction *_activation_function;
@@ -113,19 +123,20 @@ class Layer
     {
         _layer_size = layer_size;
     }
+
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     Layer(int layer_size,ActivationFunction *activation_function)
     {
         _layer_size = layer_size;
     }
     virtual ~Layer() {}
 
-    virtual void buildLayer(int input_size_of_next_layer) = 0;
+    virtual void buildLayer(int input_size_of_last_layer) = 0;
 
-        };
+};
 
-class WorkingLayer : public Layer
-        {
-        public:
+class WorkingLayer : public Layer{
+public:
     Matrixd _active_values;
     Matrixd _derivation_neurons;
     Matrixd _weights;
@@ -137,68 +148,100 @@ class WorkingLayer : public Layer
         _activation_function = activation_function;
     }
 
-    void buildLayer(int input_size_of_next_layer) override
+
+    void buildLayer(int input_size_of_last_layer) override
     {
-        _weights = Matrixd::Random(_layer_size, input_size_of_next_layer);
-        _gradient = Matrixd::Zero(_layer_size, input_size_of_next_layer);
+        _weights = Matrixd::Random(input_size_of_last_layer, _layer_size);
+        _gradient = Matrixd::Zero(input_size_of_last_layer, _layer_size);
         _active_values = Matrixd::Zero(1, _layer_size);
         _values = Matrixd::Zero(1, _layer_size);
         _derivation_neurons = Matrixd::Zero(1, _layer_size);
     }
-        };
+};
 
-class InputLayer : public Layer
-        {
-        public:
+class InputLayer : public Layer{
+public:
     explicit InputLayer(int layer_size) :Layer(layer_size){}
 
-    void buildLayer(int input_size_of_next_layer) override {
+    void buildLayer(int input_size_of_last_layer) override {
         _values = Matrixd::Zero(1, _layer_size);
     }
-        };
+};
 
-class OutputLayer : public Layer
-        {
-        public:
+class OutputLayer : public WorkingLayer{
+public:
 
-    explicit OutputLayer(int layer_size) : Layer(layer_size){}
 
-    void buildLayer(int input_size_of_next_layer) override {
+    //Add linear function as default ---------
+    explicit OutputLayer(int layer_size,ActivationFunction *activation_function) : WorkingLayer(layer_size,activation_function){}
+
+    void buildLayer(int input_size_of_last_layer) override {
         _values = Matrixd::Zero(1,_layer_size);
+        _active_values = Matrixd::Zero(1, _layer_size);
+        _derivation_neurons = Matrixd::Zero(1, _layer_size);
+        _weights = Matrixd::Ones(input_size_of_last_layer, _layer_size);
     }
-        };
+};
 
-class SequentialLayer : public WorkingLayer
-        {
-        public:
+//work in progress--------------
+class SequentialLayer : public WorkingLayer{
+public:
     SequentialLayer(int layer_size, ActivationFunction *activation_function)
             : WorkingLayer(layer_size, activation_function){}
-        };
+};
 
-class ConvolutionLayer : WorkingLayer
-        {
-        public:
+//work in progress--------------
+class ConvolutionLayer : WorkingLayer{
+public:
     ConvolutionLayer(int layer_size, ActivationFunction *activation_function)
             : WorkingLayer(layer_size, activation_function){}
-        };
+};
 //Layers----------------------------------------------------------------------------------------------------------------
 
 
 
+class Model{
 
-
-class Model
-{
-    std::vector<std::shared_ptr<Layer>> _layers;
 public:
-    Model(std::vector<std::shared_ptr<Layer>> layers)
+
+    //to private
+    std::vector<std::shared_ptr<Layer>> _layers;
+
+    Model(std::vector<std::shared_ptr<Layer>> layers) {
+        for(auto i:layers){
+            push(i);
+        }
+    }
+
+/*    Model(std::vector<std::shared_ptr<Layer>> layers)
     {
-        _layers = layers;
+        _layers = std::move(layers);
         for(int i = 0;i < _layers.size();++i)
         {
             //_layers[i]->buildLayer(-layers[i+1]->_layer_size);
         }
+    }*/
+
+    void push(std::shared_ptr<Layer> layer){
+
+        if(_layers.empty()){
+            _layers.push_back(std::move(layer));
+            //maybe trouble with layers
+
+            _layers[0]->buildLayer(0);
+            return;
+        }
+
+        _layers.push_back(std::move(layer));
+        _layers[_layers.size()-1]->buildLayer(_layers[_layers.size()-2]->_layer_size);
     }
+
+
+    ~Model(){
+        _layers.clear();
+    }
+
+
 };
 
 
@@ -206,13 +249,18 @@ public:
 int main()
 {
     LogisticFunction logistic;
+    LinearFunction linear;
     std::vector<std::shared_ptr<Layer>> layers
     {
             std::make_shared<InputLayer>(5),
             std::make_shared<SequentialLayer>(6,&logistic),
-            std::make_shared<OutputLayer>(5)
+            std::make_shared<OutputLayer>(5,&linear)
     };
     Model network(layers);
+
+    for(int i = 1;i < network._layers.size();++i){
+        std::cout << network._layers[i]->_weights << "\n\n";
+    }
 
 }
 
