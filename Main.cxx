@@ -115,41 +115,25 @@ public:
 //Layers----------------------------------------------------------------------------------------------------------------
 class Layer{
 public:
-    int _layer_size;
     Matrixd _values;
+    Matrixd _active_values;
+    Matrixd _derivation_neurons;
+    Matrixd _weights;
+    Matrixd _gradient;
     ActivationFunction *_activation_function;
+    int _layer_size;
 
-    Layer(int layer_size)
-    {
-        _layer_size = layer_size;
-    }
 
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     Layer(int layer_size,ActivationFunction *activation_function)
     {
         _layer_size = layer_size;
-    }
-    virtual ~Layer() {}
-
-    virtual void buildLayer(int input_size_of_last_layer) = 0;
-
-};
-
-class WorkingLayer : public Layer{
-public:
-    Matrixd _active_values;
-    Matrixd _derivation_neurons;
-    Matrixd _weights;
-    Matrixd _gradient;
-
-    WorkingLayer(int layer_size,ActivationFunction *activation_function) : Layer(layer_size,activation_function)
-    {
-        _layer_size = layer_size;
         _activation_function = activation_function;
     }
 
+    virtual ~Layer() {}
 
-    void buildLayer(int input_size_of_last_layer) override
+    void buildLayer(int input_size_of_last_layer)
     {
         _weights = Matrixd::Random(input_size_of_last_layer, _layer_size);
         _gradient = Matrixd::Zero(input_size_of_last_layer, _layer_size);
@@ -157,44 +141,23 @@ public:
         _values = Matrixd::Zero(1, _layer_size);
         _derivation_neurons = Matrixd::Zero(1, _layer_size);
     }
+
 };
 
-class InputLayer : public Layer{
-public:
-    explicit InputLayer(int layer_size) :Layer(layer_size){}
 
-    void buildLayer(int input_size_of_last_layer) override {
-        _values = Matrixd::Zero(1, _layer_size);
-    }
-};
-
-class OutputLayer : public WorkingLayer{
-public:
-
-
-    //Add linear function as default ---------
-    explicit OutputLayer(int layer_size,ActivationFunction *activation_function) : WorkingLayer(layer_size,activation_function){}
-
-    void buildLayer(int input_size_of_last_layer) override {
-        _values = Matrixd::Zero(1,_layer_size);
-        _active_values = Matrixd::Zero(1, _layer_size);
-        _derivation_neurons = Matrixd::Zero(1, _layer_size);
-        _weights = Matrixd::Ones(input_size_of_last_layer, _layer_size);
-    }
-};
 
 //work in progress--------------
-class SequentialLayer : public WorkingLayer{
+class SequentialLayer : public Layer{
 public:
     SequentialLayer(int layer_size, ActivationFunction *activation_function)
-            : WorkingLayer(layer_size, activation_function){}
+            : Layer(layer_size, activation_function){}
 };
 
 //work in progress--------------
-class ConvolutionLayer : WorkingLayer{
+class ConvolutionLayer : Layer{
 public:
     ConvolutionLayer(int layer_size, ActivationFunction *activation_function)
-            : WorkingLayer(layer_size, activation_function){}
+            : Layer(layer_size, activation_function){}
 };
 //Layers----------------------------------------------------------------------------------------------------------------
 
@@ -252,9 +215,9 @@ int main()
     LinearFunction linear;
     std::vector<std::shared_ptr<Layer>> layers
     {
-            std::make_shared<InputLayer>(5),
             std::make_shared<SequentialLayer>(6,&logistic),
-            std::make_shared<OutputLayer>(5,&linear)
+            std::make_shared<SequentialLayer>(3,&logistic),
+            std::make_shared<SequentialLayer>(2,&logistic),
     };
     Model network(layers);
 
