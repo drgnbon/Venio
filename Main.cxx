@@ -58,8 +58,8 @@ class LogisticFunction : public ActivationFunction
         };
 
 class SoftSignFunction : public ActivationFunction
-{
-public:
+        {
+        public:
     double getActivateValue(double x) override
     {
         return x/(1+abs(x));
@@ -69,7 +69,7 @@ public:
     {
         return 1/pow(1+abs(x),2);
     }
-};
+        };
 //ActivationFunctions---------------------------------------------------------------------------------------------------
 
 //LossFunctions---------------------------------------------------------------------------------------------------------
