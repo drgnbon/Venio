@@ -111,8 +111,7 @@ public:
 class Layer {
 public:
     Matrixd _bias,_bias_gradient;
-    Matrixd _values;
-    Matrixd _active_values;
+    Matrixd _values,_active_values;
     Matrixd _derivation_neurons;
     Matrixd _weights,_weights_gradient;
     ActivationFunction *_activation_function;
@@ -127,10 +126,10 @@ public:
     virtual ~Layer() {}
 
 
-    //rename input to output size
-    void buildLayer(int input_size_of_last_layer) {
-        _weights = Matrixd::Random(input_size_of_last_layer, _layer_size);
-        _weights_gradient = Matrixd::Zero(input_size_of_last_layer, _layer_size);
+    //warning rebasing to next layer
+    void buildLayer(int input_size_of_next_layer) {
+        _weights = Matrixd::Random(_layer_size, input_size_of_next_layer);
+        _weights_gradient = Matrixd::Zero(_layer_size, input_size_of_next_layer);
         _active_values = Matrixd::Zero(1, _layer_size);
         _values = Matrixd::Zero(1, _layer_size);
         _bias = Matrixd::Random(1, _layer_size);
@@ -172,12 +171,15 @@ public:
     Matrixd getLayerValues(){
         return _values;
     }
+    Matrixd getWeights(){
+        return _weights;
+    }
     void activateLayer(){
         _active_values = _activation_function->toActivateMatrix(_values);
     }
 
-    virtual void propogateLayer(Matrixd last_layer_output) = 0;
-    virtual void backPropogateLayer(Matrixd next_layer_derivation, Matrixd next_layer_values) = 0;
+    virtual void propogateLayer(Matrixd last_layer_output,Matrixd last_layer_weights) = 0;
+    virtual void backPropogateLayer(Matrixd derivation_neurons_next_layer, Matrixd next_layer_values) = 0;
 
 
 };
@@ -189,18 +191,18 @@ public:
     SequentialLayer(int layer_size, ActivationFunction *activation_function)
             : Layer(layer_size, activation_function) {}
 
-    void propogateLayer(Matrixd last_layer_output) override{
-        _values = last_layer_output*_weights + _bias;
+    void propogateLayer(Matrixd last_layer_output,Matrixd last_layer_weights) override{
+        _values = last_layer_output*last_layer_weights + _bias;
         activateLayer();
     }
 
-    void backPropogateLayer(Matrixd next_layer_derivation, Matrixd next_layer_values) override{
+    //work----------------------------------------------------------------------------------------------------
+    void backPropogateLayer(Matrixd derivation_neurons_next_layer, Matrixd next_layer_values) override{
 
-        Matrixd next_derivation_neurons /*(with af)*/ = Matrixd( next_layer_derivation.array() * _activation_function->toDerivateMatrix(next_layer_values).array());
+        Matrixd next_layer_derivation = Matrixd( derivation_neurons_next_layer.array() * _activation_function->toDerivateMatrix(next_layer_values).array()    );
 
-        _derivation_neurons = next_derivation_neurons * next_weights.transpose();
-        _weights_gradient = last_active_values.transpose() * _derivation_neurons;
-        _bias_gradient = _derivation_neurons;
+        _derivation_neurons = next_layer_derivation * _weights.transpose();
+        _weights_gradient = _active_values.transpose() * next_layer_derivation;
     }
 
 
@@ -212,10 +214,10 @@ public:
     ConvolutionLayer(int layer_size, ActivationFunction *activation_function)
             : Layer(layer_size, activation_function) {}
 
-    void propogateLayer(Matrixd last_layer_output) override{
+    void propogateLayer(Matrixd last_layer_output,Matrixd last_layer_weights) override{
         //Work in progress--------------------------
     }
-    void backPropogateLayer(Matrixd next_layer_derivation, Matrixd next_layer_values) override{
+    void backPropogateLayer(Matrixd derivation_neurons_next_layer, Matrixd next_layer_values) override{
         //Work in progress--------------------------
     }
 };
@@ -225,6 +227,7 @@ public:
 
 class Model {
 
+    bool _is_compiled;
     LossFunction *_loss_function;
     Matrixd _input, _output;
     std::vector<std::shared_ptr<Layer>> _layers;
@@ -234,10 +237,12 @@ public:
 
 
     Model(LossFunction *loss_function,std::vector<std::shared_ptr<Layer>> layers) {
+
         for (auto i: layers) {
             push(i);
         }
 
+        compile();
         _input = Matrixd::Zero(1, _layers[0]->_layer_size);
         _output = Matrixd::Zero(1, _layers[_layers.size() - 1]->_layer_size);
         _loss_function = loss_function;
@@ -273,7 +278,11 @@ public:
 
         std::cout << "Output size : " << _output.cols() << ", Output: " << _output << "\n";
     }
-
+    void compile(){
+        if(_is_compiled) return;
+        _is_compiled = true;
+        _layers[_layers.size() - 1]->buildLayer(0);
+    }
 
     void setInput(Matrixd input) {
 
@@ -286,30 +295,38 @@ public:
         }*/
         // }
 
+
+        //add if's
         _input = std::move(input);
-        _layers[0]->buildLayer(_input.cols());
+        _layers[0]->_active_values = _input;
     }
     Matrixd getOutput() {
         return _output;
     }
     void push(std::shared_ptr<Layer> layer) {
 
+        _is_compiled = false;
+
         if (_layers.empty()) {
             _layers.push_back(std::move(layer));
-            //maybe trouble with eigen and matrix on 0
-
-            _layers[0]->buildLayer(0);
             return;
         }
 
         _layers.push_back(std::move(layer));
-        _layers[_layers.size() - 1]->buildLayer(_layers[_layers.size() - 2]->_layer_size);
+        _layers[_layers.size() - 2]->buildLayer(_layers[_layers.size() - 1]->_layer_size);
     }
 
+
+    //work--------------------------------------------------------------------
     void forwardPropogation(){
-        _layers[0]->propogateLayer(_input);
+
+        if(!_is_compiled){
+            compile();
+        }
+
         for(int i = 1;i < _layers.size();++i){
-            _layers[i]->propogateLayer(_layers[i-1]->getLayerActiveValues());
+            _layers[i]->propogateLayer(_layers[i-1]->getLayerActiveValues(),_layers[i-1]->getWeights());
+
         }
 
         //Add activation to output (maybe softmax)-----------------
@@ -317,15 +334,16 @@ public:
     }
     void backPropogation(Matrixd right_answer){
 
-        //if do better output change this code {
-        _layers[_layers.size()-1]->setLayerDerivation(_loss_function->getDerivationLoss(_output,right_answer) );
-        // }
+        if(!_is_compiled){
+            compile();
+        }
 
+        _layers[_layers.size()-1]->_derivation_neurons = _loss_function->getDerivationLoss(_output, right_answer);
 
-        for(int i = _layers.size()-2; i >= 0; --i)
+        for(long long i = _layers.size()-2; i >= 0; --i)
         {
-           _layers[i]->backPropogateLayer(_layers[i+1]->getLayerDerivation(),_layers[i+1]->getLayerValues());
-            break;
+            //WARNING update to new many activation functions on different layers
+            _layers[i]->backPropogateLayer( _layers[i+1]->_derivation_neurons, _layers[i+1]->_values);
         }
     }
 
