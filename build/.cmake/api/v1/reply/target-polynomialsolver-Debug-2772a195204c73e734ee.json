@@ -1,0 +1,167 @@
+{
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"ei_add_test",
+			"add_dependencies"
+		],
+		"files" : 
+		[
+			"eigen-3.4.0/cmake/EigenTesting.cmake",
+			"eigen-3.4.0/unsupported/test/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 99,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 210,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "polynomialsolver_4::@bb8b10a484f0aea357bb"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "polynomialsolver_5::@bb8b10a484f0aea357bb"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "polynomialsolver_6::@bb8b10a484f0aea357bb"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "polynomialsolver_1::@bb8b10a484f0aea357bb"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "polynomialsolver_2::@bb8b10a484f0aea357bb"
+		},
+		{
+			"backtrace" : 8,
+			"id" : "polynomialsolver_3::@bb8b10a484f0aea357bb"
+		},
+		{
+			"backtrace" : 9,
+			"id" : "polynomialsolver_11::@bb8b10a484f0aea357bb"
+		},
+		{
+			"backtrace" : 10,
+			"id" : "polynomialsolver_7::@bb8b10a484f0aea357bb"
+		},
+		{
+			"backtrace" : 11,
+			"id" : "polynomialsolver_10::@bb8b10a484f0aea357bb"
+		},
+		{
+			"backtrace" : 12,
+			"id" : "polynomialsolver_8::@bb8b10a484f0aea357bb"
+		},
+		{
+			"backtrace" : 13,
+			"id" : "polynomialsolver_12::@bb8b10a484f0aea357bb"
+		},
+		{
+			"backtrace" : 14,
+			"id" : "polynomialsolver_9::@bb8b10a484f0aea357bb"
+		}
+	],
+	"id" : "polynomialsolver::@bb8b10a484f0aea357bb",
+	"name" : "polynomialsolver",
+	"paths" : 
+	{
+		"build" : "eigen-3.4.0/unsupported/test",
+		"source" : "eigen-3.4.0/unsupported/test"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

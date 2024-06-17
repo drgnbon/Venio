@@ -1,0 +1,97 @@
+{
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"ei_add_test",
+			"add_dependencies"
+		],
+		"files" : 
+		[
+			"eigen-3.4.0/cmake/EigenTesting.cmake",
+			"eigen-3.4.0/unsupported/test/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 43,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 210,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "autodiff_scalar_1::@bb8b10a484f0aea357bb"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "autodiff_scalar_3::@bb8b10a484f0aea357bb"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "autodiff_scalar_4::@bb8b10a484f0aea357bb"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "autodiff_scalar_2::@bb8b10a484f0aea357bb"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "autodiff_scalar_5::@bb8b10a484f0aea357bb"
+		}
+	],
+	"id" : "autodiff_scalar::@bb8b10a484f0aea357bb",
+	"name" : "autodiff_scalar",
+	"paths" : 
+	{
+		"build" : "eigen-3.4.0/unsupported/test",
+		"source" : "eigen-3.4.0/unsupported/test"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug with g++",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Venio.exe", // Путь к исполняемому файлу после компиляции
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "build", // Имя задачи для сборки проекта (см. tasks.json)
+            "miDebuggerPath": "gdb", // Путь к исполняемому файлу gdb, если он не находится в системном PATH
+            "miDebuggerArgs": "" // Дополнительные аргументы для gdb, если необходимо
+        }
+    ]
+}
