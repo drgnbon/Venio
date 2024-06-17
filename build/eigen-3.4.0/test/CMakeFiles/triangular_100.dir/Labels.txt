@@ -1,4 +1,0 @@
-# Target labels
- BuildOfficial
-# Source files and their labels
-D:/Projects/Venio/eigen-3.4.0/test/triangular.cpp
