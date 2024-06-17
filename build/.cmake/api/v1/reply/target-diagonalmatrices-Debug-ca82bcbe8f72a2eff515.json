@@ -1,0 +1,147 @@
+{
+	"backtrace" : 2,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"ei_add_test",
+			"add_dependencies"
+		],
+		"files" : 
+		[
+			"eigen-3.4.0/cmake/EigenTesting.cmake",
+			"eigen-3.4.0/test/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 189,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 210,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 214,
+				"parent" : 1
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 3,
+			"id" : "diagonalmatrices_6::@b47af5dd8586283774b0"
+		},
+		{
+			"backtrace" : 4,
+			"id" : "diagonalmatrices_2::@b47af5dd8586283774b0"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "diagonalmatrices_3::@b47af5dd8586283774b0"
+		},
+		{
+			"backtrace" : 6,
+			"id" : "diagonalmatrices_1::@b47af5dd8586283774b0"
+		},
+		{
+			"backtrace" : 7,
+			"id" : "diagonalmatrices_5::@b47af5dd8586283774b0"
+		},
+		{
+			"backtrace" : 8,
+			"id" : "diagonalmatrices_4::@b47af5dd8586283774b0"
+		},
+		{
+			"backtrace" : 9,
+			"id" : "diagonalmatrices_8::@b47af5dd8586283774b0"
+		},
+		{
+			"backtrace" : 10,
+			"id" : "diagonalmatrices_7::@b47af5dd8586283774b0"
+		},
+		{
+			"backtrace" : 11,
+			"id" : "diagonalmatrices_9::@b47af5dd8586283774b0"
+		},
+		{
+			"backtrace" : 12,
+			"id" : "diagonalmatrices_10::@b47af5dd8586283774b0"
+		}
+	],
+	"id" : "diagonalmatrices::@b47af5dd8586283774b0",
+	"name" : "diagonalmatrices",
+	"paths" : 
+	{
+		"build" : "eigen-3.4.0/test",
+		"source" : "eigen-3.4.0/test"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}
