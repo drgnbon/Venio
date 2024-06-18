@@ -11,6 +11,39 @@
 using namespace Eigen;
 typedef Eigen::MatrixXd Matrixd;
 
+
+//Advanced generator------------------------------------------------------------------------------------------------------
+class RandomGenerator {
+public:
+    static double generateRandomNumber(double min_rnd, double max_rnd) {
+        std::random_device random_device;
+        std::mt19937 gen(random_device());
+        std::uniform_real_distribution<double> rng_coin(min_rnd, max_rnd);
+        return rng_coin(gen);
+    }
+
+    static Matrixd generateRandomMatrix(double min_rnd, double max_rnd, size_t cols, size_t rows) {
+        std::random_device random_device;
+        std::mt19937 gen(random_device());
+        std::uniform_real_distribution<double> rng_coin(min_rnd, max_rnd);
+        Matrixd matrix(rows, cols);
+        for (long long i = 0; i < rows; ++i) {
+            for (long long j = 0; j < cols; ++j) {
+                matrix(i, j) = rng_coin(gen);
+            }
+        }
+        return matrix;
+    }
+
+private:
+    RandomGenerator() = default;
+    ~RandomGenerator() = default;
+
+    RandomGenerator(const RandomGenerator&) = delete;
+    RandomGenerator& operator=(const RandomGenerator&) = delete;
+};
+//Advanced generator------------------------------------------------------------------------------------------------------
+
 // Exception logger------------------------------------------------------------------------------------------------------
 
 class ErrorLogger
@@ -617,6 +650,10 @@ public:
 
 int main()
 {
+    std::cout << RandomGenerator::generateRandomMatrix(0.5,0.6,2,5) << "\n";
+    system("pause");
+
+
     //srand(time(NULL));
 
     SquareErrorFunction square;
