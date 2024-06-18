@@ -44,11 +44,9 @@ class ActivationFunction
 {
 public:
     ActivationFunction() = default;
-
     ~ActivationFunction() = default;
 
     virtual double toActivateValue(double x) = 0;
-
     virtual double toDerivateValue(double x) = 0;
 
     Matrixd toActivateMatrix(Matrixd matrix)
@@ -62,7 +60,6 @@ public:
         }
         return matrix;
     }
-
     Matrixd toDerivateMatrix(Matrixd matrix)
     {
         for (int i = 0; i < matrix.rows(); ++i)
@@ -80,12 +77,12 @@ class LogisticFunction : public ActivationFunction
 public:
     double toActivateValue(double x) override
     {
-        return 1.0 / (1.0 + exp(-x));
+        return double(1.f / (1.f + double(exp(-double(x)))));
     }
 
     double toDerivateValue(double x) override
     {
-        return (1.0 / (1.0 + exp(-x))) * (1 - (1.0 / (1.0 + exp(-x))));
+        return double(double(toActivateValue(x)) * double(1.f - double(toActivateValue(x))));
     }
 };
 class LinearFunction : public ActivationFunction
@@ -205,6 +202,10 @@ public:
         _bias = Matrixd::Random(1, _layer_size);
         _bias_gradient = Matrixd::Zero(1, _layer_size);
         _derivation_neurons = Matrixd::Zero(1, _layer_size);
+    }
+
+    void buildFirstLayer(){
+        _active_values = Matrixd::Zero(1, _layer_size);
     }
 
     void activateLayer()
@@ -384,6 +385,7 @@ private:
 public:
     Model(LossFunction *loss_function, const std::vector<std::shared_ptr<Layer>> &layers)
     {
+
         for (const auto i : layers)
         {
             addLayer(i);
@@ -393,7 +395,6 @@ public:
         _output = Matrixd::Zero(1, _layers[_layers.size() - 1]->getLayerSize());
         _loss_function = loss_function;
     }
-
     ~Model()
     {
         _layers.clear();
@@ -401,10 +402,10 @@ public:
 
     void addLayer(std::shared_ptr<Layer> layer)
     {
-        if (_layers.empty())
-        {
+
+        if(_layers.size() == 0){
             _layers.push_back(std::move(layer));
-            _layers[0]->buildLayer(_input.cols());
+            _layers[0]->buildFirstLayer();
             return;
         }
         _layers.push_back(std::move(layer));
@@ -432,7 +433,6 @@ public:
 
     void forwardPropogation()
     {
-        _layers[0]->propogateLayer(_input);
         for (int i = 1; i < _layers.size(); ++i)
         {
             _layers[i]->propogateLayer(_layers[i - 1]->getLayerActiveValues());
@@ -458,17 +458,13 @@ public:
                                            _layers[i + 1]->getLayerWeights(),
                                            _layers[i - 1]->getLayerActiveValues());
         }
-        _layers[0]->backPropogateLayer(_layers[1]->getLayerDerivation(),
-                                       _layers[1]->getLayerValues(),
-                                       _layers[1]->getLayerWeights(),
-                                       _input);
     }
 
     // getters & setters for class Model---------------------------------------------------------------------
     void setInput(Matrixd input)
     {
         _input = std::move(input);
-        _layers[0]->buildLayer(_input.cols());
+        _layers[0]->setLayerActiveValues(_input);
     }
     void setLayerDerivation(size_t number_of_layer, Matrixd new_derivation_neurons_matrix)
     {
@@ -563,7 +559,6 @@ public:
     }
     virtual void updateWeights(double learning_speed, double epoch) = 0;
 };
-
 class GD : public Optimizer
 {
 public:
@@ -571,14 +566,13 @@ public:
 
     void updateWeights(double learning_speed = 0.05, double epoch = 1) override
     {
-        for (int i = 0; i <= _network.getLayersSize() - 1; i++)
+        for (int i = 1; i < _network.getLayersSize(); i++)
         {
-            _network.setLayerWeights(i, _network.getLayerWeights(i) -= _network.getLayerWeightsGradient(i) * learning_speed);
-            _network.setLayerBias(i, _network.getLayerBias(i) -= _network.getLayerBiasGradient(i) * learning_speed);
+            _network.setLayerWeights(i, _network.getLayerWeights(i) - _network.getLayerWeightsGradient(i) * learning_speed);
+            _network.setLayerBias(i, _network.getLayerBias(i) - _network.getLayerBiasGradient(i) * learning_speed);
         }
     }
 };
-
 class ADAM : public Optimizer
 {
 public:
@@ -594,7 +588,7 @@ public:
         _history_speed = new Matrixd[network.getLayersSize()];
         _history_moment = new Matrixd[network.getLayersSize()];
 
-        for (int i = 0; i < network.getLayersSize(); ++i)
+        for (int i = 1; i < network.getLayersSize(); ++i)
         {
             _history_speed[i] = network.getLayerWeights(i);
             _history_moment[i] = network.getLayerWeights(i);
@@ -623,9 +617,7 @@ public:
 
 int main()
 {
-    Eigen::setNbThreads(12);
-
-    srand(time(NULL));
+    //srand(time(NULL));
 
     SquareErrorFunction square;
     LogisticFunction logistic;
@@ -635,19 +627,20 @@ int main()
     GhFunction gh;
 
     std::vector<std::shared_ptr<Layer>> layers{
-        std::make_shared<SequentialLayer>(6, &gh),
-        std::make_shared<SequentialLayer>(3000, &gh),
-        std::make_shared<SequentialLayer>(2, &gh),
+        std::make_shared<SequentialLayer>(6,&logistic),
+        std::make_shared<SequentialLayer>(3000, &logistic),
+        std::make_shared<SequentialLayer>(2, &logistic),
 
     };
+
     Model network(&square, layers);
 
     Matrixd a(1, 6);
-    a << 1, 1, 1, 1, 1, 1;
+    a << 0.7, 0.7, 0.7, 0.7, 0.7, 0.7;
     Matrixd b(1, 2);
     b << 0.3, 0.3;
 
-    network.setInput(a); // исправить это говно
+
 
     GD gd(network);
     ADAM adam(network);
@@ -656,12 +649,13 @@ int main()
 
     while (true)
     {
+        network.setInput(a);
         network.forwardPropogation();
         network.backPropogation(b);
-        adam.updateWeights(0.000005, epoch);
+        gd.updateWeights(0.5, epoch);
 
         std::cout << network.getOutput() << "\n";
-        // system("pause");
+        //system("pause");
         ++epoch;
     }
 
