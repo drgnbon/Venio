@@ -2,7 +2,7 @@ class LossFunction
 {
 public:
     virtual double getMediumLoss(const Matrixd &activeValue, const Matrixd &rightAnswer) = 0;
-    virtual Matrixd getDerivationLoss(const Matrixd &activeValue, const Matrixd &rightAnswer) = 0;
+    virtual Matrixd getDerivationLoss(Matrixd activeValue,Matrixd rightAnswer) = 0;
 };
 class SquareErrorFunction : public LossFunction
 {
@@ -13,7 +13,7 @@ public:
         return squareError / static_cast<double>(activeValue.size());
     }
 
-    Matrixd getDerivationLoss(const Matrixd &activeValue, const Matrixd &rightAnswer) override
+    Matrixd getDerivationLoss(Matrixd activeValue,Matrixd rightAnswer) override
     {
         return 2.0 * (activeValue - rightAnswer);
     }

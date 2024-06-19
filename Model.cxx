@@ -2,20 +2,25 @@ class Model
 {
 private:
     LossFunction *_loss_function;
-    Matrixd _input, _output;
     std::vector<std::shared_ptr<Layer>> _layers;
+    size_t _model_size;
 
 public:
     Model(LossFunction *loss_function, const std::vector<std::shared_ptr<Layer>> &layers)
     {
-
+        _model_size = 0;
         for (const auto i : layers)
         {
             addLayer(i);
         }
 
-        _input = Matrixd::Zero(1, _layers[0]->getLayerSize());
-        _output = Matrixd::Zero(1, _layers[_layers.size() - 1]->getLayerSize());
+        /*std::cout << "Network size = " << _model_size;
+        system("pause");
+        exit(0);
+
+         Be accurate it dangerous!!!!
+         */
+
         _loss_function = loss_function;
     }
     ~Model()
@@ -28,17 +33,19 @@ public:
 
         if (_layers.size() == 0)
         {
-            _layers.push_back(std::move(layer));
+            ++_model_size;
+            _layers.push_back(layer);
             _layers[0]->buildFirstLayer();
             return;
         }
-        _layers.push_back(std::move(layer));
+        ++_model_size;
+        _layers.push_back(layer);
         _layers[_layers.size() - 1]->buildLayer(_layers[_layers.size() - 2]->getLayerSize());
     }
 
     void Log()
     {
-        std::cout << "Input size : " << _input.cols() << ", Input: " << _input << "\n";
+        std::cout << "Input size : " << _layers[0]->getLayerSize() << ", Input: " << getInput() << "\n";
 
         printf("Number of layers: %zu \n", _layers.size());
 
@@ -52,7 +59,7 @@ public:
             std::cout << i->getLayerActiveValues() << "\n";
             std::cout << "\tLayer derivations: " << i->getLayerDerivation() << "\n\n";
         }
-        std::cout << "Output size : " << _output.cols() << ", Output: " << _output << "\n";
+        std::cout << "Output size : " << _layers[_model_size-1]->getLayerSize() << ", Output: " << _layers[_model_size-1]->getLayerActiveValues() << "\n";
     }
 
     void forwardPropogation()
@@ -63,19 +70,44 @@ public:
         }
 
         // Add activation to output (maybe softmax)-----------------
-        _output = _layers[_layers.size() - 1]->getLayerActiveValues();
     }
     void backPropogation(Matrixd right_answer)
     {
+        Matrixd dt,dw,dh,df,db;
+        Matrixd dx = getDerivationLossForLastLayer(right_answer);
+
+        for(int i = _model_size-1;i >= 1;--i){
+
+            dh = dx;
+            df = _layers[i]->getLayerDerivationMatrix();
+
+            dt = dh.array()*df.array();
+            dw = _layers[i-1]->getLayerActiveValues().transpose()*dt;
+            dx = dt * _layers[i]->getLayerWeights().transpose();
+            db = dt;
+
+            _layers[i]->setLayerDerivation(dt);
+            _layers[i]->setLayerWeightsGradient(dw);
+            _layers[i]->setLayerBiasGradient(db);
+        }
+
+
 
         // Do work------------------------------------------------------------------
     }
 
+
+
+
+
+
+
+
+
     // getters & setters for class Model---------------------------------------------------------------------
     void setInput(Matrixd input)
     {
-        _input = std::move(input);
-        _layers[0]->setLayerActiveValues(_input);
+        _layers[0]->setLayerActiveValues(input);
     }
     void setLayerDerivation(size_t number_of_layer, Matrixd new_derivation_neurons_matrix)
     {
@@ -104,6 +136,10 @@ public:
     void setModelLossFunction(LossFunction *new_loss_function)
     {
         _loss_function = new_loss_function;
+    }
+
+    Matrixd getDerivationLossForLastLayer(Matrixd right_answer){
+        return _loss_function->getDerivationLoss(_layers[_layers.size()-1]->getLayerActiveValues(),right_answer);
     }
 
     Matrixd getLayerBias(size_t number_of_layer)
@@ -144,11 +180,11 @@ public:
     }
     Matrixd getOutput()
     {
-        return _output;
+        return _layers[_model_size-1]->getLayerActiveValues();
     }
     Matrixd getInput()
     {
-        return _input;
+        return _layers[0]->getLayerActiveValues();
     }
     size_t getLayersSize()
     {

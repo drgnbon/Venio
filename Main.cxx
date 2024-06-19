@@ -7,7 +7,6 @@
 #include <fstream>
 #include <random>
 #include <filesystem>
-
 #include "RandomGenerator.cxx"
 #include "ErrorLogger.cxx"
 #include "ActivationFunction.cxx"
@@ -32,33 +31,40 @@ int main()
     GhFunction gh;
 
     std::vector<std::shared_ptr<Layer>> layers{
-        std::make_shared<SequentialLayer>(6, &ssf),
-        std::make_shared<SequentialLayer>(3000, &ssf),
-        std::make_shared<SequentialLayer>(2, &ssf),
+        std::make_shared<SequentialLayer>(1, &linear),
+        std::make_shared<SequentialLayer>(1, &linear),
+        std::make_shared<SequentialLayer>(1, &linear),
 
     };
 
     Model network(&square, layers);
 
-    Matrixd a(1, 6);
-    a << 0.7, 0.7, 0.7, 0.7, 0.7, 0.7;
-    Matrixd b(1, 2);
-    b << 0.3, 0.3;
+    Matrixd a(1, 1);
+    a.setConstant(0.125);
+    Matrixd b(1, 1);
+    b.setConstant(0.1);
 
     GD gd(network);
     ADAM adam(network);
 
-    //int epoch = 1;
+    int epoch = 1;
+    network.setInput(a);
 
     while (true)
     {
-        network.setInput(a);
+
         network.forwardPropogation();
-        //network.backPropogation(b);
-        //gd.updateWeights(0.2, epoch);
+
+
+        std::cout <<network.getLayerActiveValues(0) << "\n\n";
+        std::cout <<network.getLayerActiveValues(1) <<"\t" << network.getLayerWeights(1) << "\t" <<network.getLayerBias(1) <<  "\n\n";
+        std::cout <<network.getLayerActiveValues(2) <<"\t" << network.getLayerWeights(2) << "\t" <<network.getLayerBias(2) <<  "\n\n";
+
+        network.backPropogation(b);
+        gd.updateWeights(0.2, epoch);
 
         std::cout << network.getOutput() << "\n";
-        //// system("pause");
-        //++epoch;
+        system("pause");
+        ++epoch;
     }
 }
