@@ -42,7 +42,7 @@ int main()
 
     std::vector<std::shared_ptr<Layer>> layers{
         std::make_shared<SequentialLayer>(100, &ssf),
-        std::make_shared<SequentialLayer>(5000000, &ssf),
+        std::make_shared<SequentialLayer>(500000, &ssf),
         std::make_shared<SequentialLayer>(1, &linear),
 
     };

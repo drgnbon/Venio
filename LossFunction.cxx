@@ -14,6 +14,6 @@ public:
     }
     Matrixd getDerivationLoss(Matrixd activeValue, Matrixd rightAnswer) override
     {
-        return (2.0 / activeValue.cols()) * (activeValue - rightAnswer);
+        return (2.0 / double(activeValue.cols()) ) * (activeValue - rightAnswer);
     }
 };

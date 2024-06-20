@@ -15,7 +15,7 @@ public:
         _layer_size = layer_size;
         _activation_function = activation_function;
     }
-    virtual ~Layer() {}
+    virtual ~Layer() = default;
     void buildLayer(int output_size_of_last_layer)
     {
         // Генерация случайных весов для связей между слоями
@@ -67,7 +67,7 @@ public:
             ErrorLogger::getInstance().logError("Error in setLayerDerivation (Not equal size of matrix) - class Layer \n");
         }
 
-        _derivation_neurons = new_derivation_neurons_matrix;
+        _derivation_neurons = std::move(new_derivation_neurons_matrix);
     }
     void setLayerBias(Matrixd new_bias_matrix)
     {
@@ -76,7 +76,7 @@ public:
             ErrorLogger::getInstance().logError("Error in setLayerBias (Not equal size of matrix) - class Layer \n");
         }
 
-        _bias = new_bias_matrix;
+        _bias = std::move(new_bias_matrix);
     }
     void setLayerBiasGradient(Matrixd new_bias_gradient_matrix)
     {
@@ -84,7 +84,7 @@ public:
         {
             ErrorLogger::getInstance().logError("Error in setLayerBiasGradient (Not equal size of matrix) - class Layer \n");
         }
-        _bias_gradient = new_bias_gradient_matrix;
+        _bias_gradient = std::move(new_bias_gradient_matrix);
     }
     void setLayerValues(Matrixd new_values_matrix)
     {
@@ -93,7 +93,7 @@ public:
             ErrorLogger::getInstance().logError("Error in setLayerValues (Not equal size of matrix) - class Layer \n");
         }
 
-        _values = new_values_matrix;
+        _values = std::move(new_values_matrix);
     }
     void setLayerActiveValues(Matrixd new_active_values_matrix)
     {
@@ -102,7 +102,7 @@ public:
             ErrorLogger::getInstance().logError("Error in setLayerActiveValues (Not equal size of matrix) - class Layer \n");
         }
 
-        _active_values = new_active_values_matrix;
+        _active_values = std::move(new_active_values_matrix);
     }
     void setLayerWeights(Matrixd new_weights_matrix)
     {
@@ -111,7 +111,7 @@ public:
             ErrorLogger::getInstance().logError("Error in setLayerWeights (Not equal size of matrix) - class Layer \n");
         }
 
-        _weights = new_weights_matrix;
+        _weights = std::move(new_weights_matrix);
     }
     void setLayerWeightsGradient(Matrixd new_weights_gradient_matrix)
     {
@@ -121,7 +121,7 @@ public:
             ErrorLogger::getInstance().logError("Error in setLayerWeightsGradient (Not equal size of matrix) - class Layer \n");
         }
 
-        _weights_gradient = new_weights_gradient_matrix;
+        _weights_gradient = std::move(new_weights_gradient_matrix);
     }
     // WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING - WARNING
     void setLayerActivationFunction(ActivationFunction *new_activation_function)

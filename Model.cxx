@@ -1,3 +1,5 @@
+#include <utility>
+
 class Model
 {
 private:
@@ -31,7 +33,7 @@ public:
     void addLayer(std::shared_ptr<Layer> layer)
     {
 
-        if (_layers.size() == 0)
+        if (_layers.empty())
         {
             ++_model_size;
             _layers.push_back(layer);
@@ -53,7 +55,7 @@ public:
 
         int k = 1;
 
-        for (auto i : _layers)
+        for (const auto& i : _layers)
         {
             printf("\tLayer num: %d,Layer size: %d,Layer active values: ", k++, i->getLayerSize());
             std::cout << i->getLayerActiveValues() << "\n";
@@ -74,7 +76,7 @@ public:
     void backPropogation(Matrixd right_answer)
     {
         Matrixd dt,dw,dh,df,db;
-        Matrixd dx = getDerivationLossForLastLayer(right_answer);
+        Matrixd dx = getDerivationLossForLastLayer(std::move(right_answer));
 
         for(int i = _model_size-1;i >= 1;--i){
 
@@ -107,27 +109,27 @@ public:
     // getters & setters for class Model---------------------------------------------------------------------
     void setInput(Matrixd input)
     {
-        _layers[0]->setLayerActiveValues(input);
+        _layers[0]->setLayerActiveValues(std::move(input));
     }
     void setLayerDerivation(size_t number_of_layer, Matrixd new_derivation_neurons_matrix)
     {
-        _layers[number_of_layer]->setLayerDerivation(new_derivation_neurons_matrix);
+        _layers[number_of_layer]->setLayerDerivation(std::move(new_derivation_neurons_matrix));
     }
     void setLayerBias(size_t number_of_layer, Matrixd new_bias_matrix)
     {
-        _layers[number_of_layer]->setLayerBias(new_bias_matrix);
+        _layers[number_of_layer]->setLayerBias(std::move(new_bias_matrix));
     }
     void setLayerValues(size_t number_of_layer, Matrixd new_values_matrix)
     {
-        _layers[number_of_layer]->setLayerValues(new_values_matrix);
+        _layers[number_of_layer]->setLayerValues(std::move(new_values_matrix));
     }
     void setLayerActiveValues(size_t number_of_layer, Matrixd new_active_values_matrix)
     {
-        _layers[number_of_layer]->setLayerActiveValues(new_active_values_matrix);
+        _layers[number_of_layer]->setLayerActiveValues(std::move(new_active_values_matrix));
     }
     void setLayerWeights(size_t number_of_layer, Matrixd new_weights_matrix)
     {
-        _layers[number_of_layer]->setLayerWeights(new_weights_matrix);
+        _layers[number_of_layer]->setLayerWeights(std::move(new_weights_matrix));
     }
     void setLayerActivationFunction(size_t number_of_layer, ActivationFunction *new_activation_function)
     {
@@ -139,7 +141,7 @@ public:
     }
 
     Matrixd getDerivationLossForLastLayer(Matrixd right_answer){
-        return _loss_function->getDerivationLoss(_layers[_layers.size()-1]->getLayerActiveValues(),right_answer);
+        return _loss_function->getDerivationLoss(_layers[_layers.size()-1]->getLayerActiveValues(),std::move(right_answer));
     }
 
     Matrixd getLayerBias(size_t number_of_layer)
