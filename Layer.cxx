@@ -47,12 +47,6 @@ public:
         // Инициализация значений слоя нулями
         _values = Matrixd::Zero(1, _layer_size);
 
-        // Генерация случайных значений для смещений (bias)
-        _bias = RandomGenerator::generateRandomMatrix(0.001, 0.999, 1, _layer_size);
-
-        // Инициализация градиентов смещений нулями
-        _bias_gradient = Matrixd::Zero(1, _layer_size);
-
         // Инициализация производных нейронов нулями
         _derivation_neurons = Matrixd::Zero(1, _layer_size);
     }
@@ -202,7 +196,7 @@ public:
 
     void propogateLayer(Matrixd last_layer_output) override
     {
-        _values = last_layer_output * _weights + _bias;
+        _values = (last_layer_output * _weights) + _bias;
         activateLayer();
     }
     void backPropogateLayer(Matrixd next_layer_derivation, Matrixd next_layer_values, Matrixd next_layer_weights, Matrixd last_active_values) override

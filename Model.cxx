@@ -82,17 +82,17 @@ public:
             df = _layers[i]->getLayerDerivationMatrix();
 
             dt = dh.array()*df.array();
-            dw = _layers[i-1]->getLayerActiveValues().transpose()*dt;
+
+            dw = _layers[i-1]->getLayerActiveValues().transpose()*dt;//
+
             dx = dt * _layers[i]->getLayerWeights().transpose();
+
             db = dt;
 
             _layers[i]->setLayerDerivation(dt);
             _layers[i]->setLayerWeightsGradient(dw);
             _layers[i]->setLayerBiasGradient(db);
         }
-
-
-
         // Do work------------------------------------------------------------------
     }
 
