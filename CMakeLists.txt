@@ -1,25 +1,30 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.10)
 
-project(Venio)
+project(Venio CUDA CXX)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Найти и настроить CUDA
+find_package(CUDAToolkit REQUIRED)
 
-find_package(OpenMP)
-if (OPENMP_FOUND)
-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-    set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
-endif()
-
-
-# Add the Eigen library
+# Добавить библиотеку Eigen
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/eigen-3.4.0")
 
-# Create your executable
-add_executable(Venio main.cxx)
+# Создать исполняемый файл
+add_executable(Venio main.cxx ${CUDA_SOURCES})
 
-# Link Eigen library to the executable
-target_link_libraries(Venio PRIVATE Eigen3::Eigen)
+# Добавить исходные файлы CUDA
+set(CUDA_SOURCES
+        GPUCalculation.cu
+)
+target_sources(Venio PRIVATE
+        ${CUDA_SOURCES}
+)
 
+# Установить стандарт CUDA и C++
+set_property(TARGET Venio PROPERTY CUDA_STANDARD 11)
+set_property(TARGET Venio PROPERTY CXX_STANDARD 11)
+
+# Связать библиотеки с исполняемым файлом
+target_link_libraries(Venio PRIVATE Eigen3::Eigen CUDA::cudart)

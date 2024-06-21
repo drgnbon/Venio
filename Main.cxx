@@ -14,70 +14,74 @@
 #include "Layer.cxx"
 #include "Model.cxx"
 #include "Optimizer.cxx"
+#include "GPUCalculation.cu"
 
 typedef Eigen::MatrixXd Matrixd;
 
 int main()
 {
-    Eigen::setNbThreads(12);
-    LogisticFunction logistic; // pass
-    LinearFunction linear;     // pass
-    SoftSignFunction ssf;      // pass
-    SincFunction sinc;         // maybe problem
-    GhFunction gh;             // pass
 
-    SquareErrorFunction square; // in progress
+    std::cout << "hallo" < "\n";
+    system("pause");
+    // Eigen::setNbThreads(12);
+    // LogisticFunction logistic; // pass
+    // LinearFunction linear;     // pass
+    // SoftSignFunction ssf;      // pass
+    // SincFunction sinc;         // maybe problem
+    // GhFunction gh;             // pass
 
-    // Matrixd in(1, 3);
-    // in << 0.1,0.5,0.2;
-    // Matrixd out(1, 3);
-    // out << 0.2,0.3,0.4;
+    // SquareErrorFunction square; // in progress
 
-    // std::cout << square.getMediumLoss(in, out);
-    // std::cout << square.getDerivationLoss(in,out);
+    // // Matrixd in(1, 3);
+    // // in << 0.1,0.5,0.2;
+    // // Matrixd out(1, 3);
+    // // out << 0.2,0.3,0.4;
 
-    // system("pause");
+    // // std::cout << square.getMediumLoss(in, out);
+    // // std::cout << square.getDerivationLoss(in,out);
 
-    // srand(time(NULL));
+    // // system("pause");
 
-    std::vector<std::shared_ptr<Layer>> layers{
-        std::make_shared<SequentialLayer>(100, &ssf),
-        std::make_shared<SequentialLayer>(500000, &ssf),
-        std::make_shared<SequentialLayer>(1, &linear),
+    // // srand(time(NULL));
 
-    };
+    // std::vector<std::shared_ptr<Layer>> layers{
+    //     std::make_shared<SequentialLayer>(100, &ssf),
+    //     std::make_shared<SequentialLayer>(500000, &ssf),
+    //     std::make_shared<SequentialLayer>(1, &linear),
 
-    Model network(&square, layers);
+    // };
 
-    Matrixd a(1, 100);
-    a.setConstant(0.1);
-    Matrixd b(1, 1);
-    b.setConstant(0.1);
+    // Model network(&square, layers);
 
-    network.setInput(a);
+    // Matrixd a(1, 100);
+    // a.setConstant(0.1);
+    // Matrixd b(1, 1);
+    // b.setConstant(0.1);
 
-    GD gd(network);
-    ADAM adam(network);
+    // network.setInput(a);
 
-    int epoch = 1;
+    // GD gd(network);
+    // ADAM adam(network);
 
-    while (true)
-    {
+    // int epoch = 1;
 
-        network.forwardPropogation();
-        network.backPropogation(b);
+    // while (true)
+    // {
 
-        // for (int i = 1; i < network.getLayersSize(); ++i)
-        // {
-        //     std::cout << network.getLayerWeights(i) << "\t";
-        //     std::cout << network.getLayerWeightsGradient(i) << "\n";
-        // }
-        // std::cout << "\n\n";
+    //     network.forwardPropogation();
+    //     network.backPropogation(b);
 
-        gd.updateWeights(0.00001, epoch);
+    //     // for (int i = 1; i < network.getLayersSize(); ++i)
+    //     // {
+    //     //     std::cout << network.getLayerWeights(i) << "\t";
+    //     //     std::cout << network.getLayerWeightsGradient(i) << "\n";
+    //     // }
+    //     // std::cout << "\n\n";
 
-        std::cout << network.getOutput() << "\n";
-        //  system("pause");
-        ++epoch;
-    }
+    //     gd.updateWeights(0.00001, epoch);
+
+    //     std::cout << network.getOutput() << "\n";
+    //     //  system("pause");
+    //     ++epoch;
+}
 }
