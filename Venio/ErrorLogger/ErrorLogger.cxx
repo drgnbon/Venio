@@ -1,23 +1,25 @@
-class ErrorLogger
-{
-public:
-    static ErrorLogger &getInstance()
-    {
-        static ErrorLogger instance;
-        return instance;
-    }
+#include "ErrorLogger.hxx"
 
-    void logError(const std::string &message)
-    {
-        std::cerr << "Error: " << message << std::endl;
-        system("pause");
-        exit(0);
-    }
+// class ErrorLogger
+// {
+// public:
+//     static ErrorLogger &getInstance()
+//     {
+//         static ErrorLogger instance;
+//         return instance;
+//     }
 
-private:
-    ErrorLogger() = default;
-    ~ErrorLogger() = default;
+//     void logError(const std::string &message)
+//     {
+//         std::cerr << "Error: " << message << std::endl;
+//         system("pause");
+//         exit(0);
+//     }
 
-    ErrorLogger(const ErrorLogger &) = delete;
-    ErrorLogger &operator=(const ErrorLogger &) = delete;
-};
+// private:
+//     ErrorLogger() = default;
+//     ~ErrorLogger() = default;
+
+//     ErrorLogger(const ErrorLogger &) = delete;
+//     ErrorLogger &operator=(const ErrorLogger &) = delete;
+// };

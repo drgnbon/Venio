@@ -1,67 +1,70 @@
-class Optimizer
-{
-protected:
-    Model &_network;
+#include "Optimizer.hxx"
 
-public:
-    explicit Optimizer(Model &network) : _network{network}
-    {
-        _network = network;
-    }
-    virtual void updateWeights(double learning_speed, double epoch) = 0;
-};
-class GD : public Optimizer
-{
-public:
-    explicit GD(Model &network) : Optimizer(network) {}
 
-    void updateWeights(double learning_speed = 0.05, double epoch = 1) override
-    {
-        for (int i = 1; i < _network.getLayersSize(); i++)
-        {
-            _network.setLayerWeights(i, _network.getLayerWeights(i) - _network.getLayerWeightsGradient(i) * learning_speed);
-            _network.setLayerBias(i, _network.getLayerBias(i) - _network.getLayerBiasGradient(i) * learning_speed);
-        }
-    }
-};
-class ADAM : public Optimizer
-{
-public:
-    Matrixd *_history_speed;
-    Matrixd *_history_moment;
-    double _gamma = 0.9;
-    double _alfa = 0.999;
-    double _epsilon = 1e-8;
+// class Optimizer
+// {
+// protected:
+//     Model &_network;
 
-    ADAM(Model &network) : Optimizer(network)
-    {
-        _network = network;
-        _history_speed = new Matrixd[network.getLayersSize()];
-        _history_moment = new Matrixd[network.getLayersSize()];
+// public:
+//     explicit Optimizer(Model &network) : _network{network}
+//     {
+//         _network = network;
+//     }
+//     virtual void updateWeights(double learning_speed, double epoch) = 0;
+// };
+// class GD : public Optimizer
+// {
+// public:
+//     explicit GD(Model &network) : Optimizer(network) {}
 
-        for (int i = 1; i < network.getLayersSize(); ++i)
-        {
-            _history_speed[i] = network.getLayerWeights(i);
-            _history_moment[i] = network.getLayerWeights(i);
-            _history_speed[i].setZero();
-            _history_moment[i].setZero();
-        }
-    }
+//     void updateWeights(double learning_speed = 0.05, double epoch = 1) override
+//     {
+//         for (int i = 1; i < _network.getLayersSize(); i++)
+//         {
+//             _network.setLayerWeights(i, _network.getLayerWeights(i) - _network.getLayerWeightsGradient(i) * learning_speed);
+//             _network.setLayerBias(i, _network.getLayerBias(i) - _network.getLayerBiasGradient(i) * learning_speed);
+//         }
+//     }
+// };
+// class ADAM : public Optimizer
+// {
+// public:
+//     Matrixd *_history_speed;
+//     Matrixd *_history_moment;
+//     double _gamma = 0.9;
+//     double _alfa = 0.999;
+//     double _epsilon = 1e-8;
 
-    ~ADAM()
-    {
-        delete[] _history_speed;
-        delete[] _history_moment;
-    }
+//     ADAM(Model &network) : Optimizer(network)
+//     {
+//         _network = network;
+//         _history_speed = new Matrixd[network.getLayersSize()];
+//         _history_moment = new Matrixd[network.getLayersSize()];
 
-    void updateWeights(double learning_speed = 0.5, double epoch = 1)
-    {
+//         for (int i = 1; i < network.getLayersSize(); ++i)
+//         {
+//             _history_speed[i] = network.getLayerWeights(i);
+//             _history_moment[i] = network.getLayerWeights(i);
+//             _history_speed[i].setZero();
+//             _history_moment[i].setZero();
+//         }
+//     }
 
-        for (int i = 0; i < _network.getLayersSize(); i++)
-        {
-            _history_speed[i] = (_gamma * _history_speed[i]) + ((1 - _gamma) * _network.getLayerWeightsGradient(i));
-            _history_moment[i] = (_alfa * _history_moment[i]) + Eigen::MatrixXd((1 - _alfa) * _network.getLayerWeightsGradient(i).array().pow(2));
-            _network.setLayerWeights(i, _network.getLayerWeights(i) - learning_speed * Eigen::MatrixXd((_history_speed[i] / (1 - pow(_gamma, epoch + 1))).array().cwiseQuotient((_history_moment[i] / (1 - pow(_alfa, epoch + 1))).array().sqrt() + _epsilon).array()));
-        }
-    }
-};
+//     ~ADAM()
+//     {
+//         delete[] _history_speed;
+//         delete[] _history_moment;
+//     }
+
+//     void updateWeights(double learning_speed = 0.5, double epoch = 1)
+//     {
+
+//         for (int i = 0; i < _network.getLayersSize(); i++)
+//         {
+//             _history_speed[i] = (_gamma * _history_speed[i]) + ((1 - _gamma) * _network.getLayerWeightsGradient(i));
+//             _history_moment[i] = (_alfa * _history_moment[i]) + Eigen::MatrixXd((1 - _alfa) * _network.getLayerWeightsGradient(i).array().pow(2));
+//             _network.setLayerWeights(i, _network.getLayerWeights(i) - learning_speed * Eigen::MatrixXd((_history_speed[i] / (1 - pow(_gamma, epoch + 1))).array().cwiseQuotient((_history_moment[i] / (1 - pow(_alfa, epoch + 1))).array().sqrt() + _epsilon).array()));
+//         }
+//     }
+// };

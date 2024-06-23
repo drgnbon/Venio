@@ -1,19 +1,9 @@
+
 class ErrorLogger
 {
 public:
-    static ErrorLogger &getInstance()
-    {
-        static ErrorLogger instance;
-        return instance;
-    }
-
-    void logError(const std::string &message)
-    {
-        std::cerr << "Error: " << message << std::endl;
-        system("pause");
-        exit(0);
-    }
-
+    static ErrorLogger &getInstance();
+    void logError(const std::string &message);
 private:
     ErrorLogger() = default;
     ~ErrorLogger() = default;
