@@ -3,6 +3,9 @@
 class LinearFunction : public ActivationFunction
 {
 public:
-     double toActivateValue(double x) override;
-     double toDerivateValue(double x) override;
+    LinearFunction() = default;
+    virtual ~LinearFunction() = default;
+
+    double toActivateValue(double x) override;
+    double toDerivateValue(double x) override;
 };

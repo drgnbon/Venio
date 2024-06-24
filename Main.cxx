@@ -3,13 +3,28 @@
 
 int main()
 {
+    LogisticFunction logistic; // pass
+    SquareErrorFunction square;
 
-    // LogisticFunction logistic;
 
-    // std::cout << logistic.toActivateValue(4);
+    std::vector<std::shared_ptr<Layer>> layers{
+            std::make_shared<SequentialLayer>(100, &logistic),
+            std::make_shared<SequentialLayer>(500, &logistic),
+            std::make_shared<SequentialLayer>(1, &logistic),
+    };
 
-    std::cout << "44564564";
+    Model network(&square, layers);
 
-    system("pause");
-    return 0;
+    Matrixd a(1, 100);
+    a.setConstant(0.1);
+    Matrixd b(1, 1);
+    b.setConstant(0.1);
+
+    network.setInput(a);
+    while (true)
+    {
+        network.forwardPropogation();
+        network.backPropogation(b);
+        std::cout << network.getOutput() << "\n";
+    }
 }
