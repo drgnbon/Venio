@@ -1,6 +1,9 @@
+#pragma once
 
+#include "Config.hxx"
 
-class ActivationFunction{
+class ActivationFunction
+{
 public:
     ActivationFunction() = default;
     ~ActivationFunction() = default;
@@ -10,5 +13,3 @@ public:
     Matrixd toActivateMatrix(Matrixd matrix);
     Matrixd toDerivateMatrix(Matrixd matrix);
 };
-
-

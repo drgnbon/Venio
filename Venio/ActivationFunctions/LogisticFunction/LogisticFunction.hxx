@@ -1,7 +1,8 @@
-#include "../ActivationFunction/ActivationFunction.hxx"
+#include "ActivationFunction.hxx"
 
-class LogisticFunction : public ActivationFunction{
+class LogisticFunction : public ActivationFunction
+{
 public:
-    double toActivateValue(double x) override;
-    double toDerivateValue(double x) override;
+     double toActivateValue(double x) override;
+     double toDerivateValue(double x) override;
 };

@@ -1,3 +1,10 @@
+#pragma once
+
+#include "Config.hxx"
+#include "Eigen/Core"
+#include <random>
+
+typedef Eigen::MatrixXd Matrixd;
 
 class RandomGenerator
 {

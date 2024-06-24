@@ -1,3 +1,10 @@
+#pragma once
+
+#include "LossFunction.hxx"
+#include "ActivationFunction.hxx"
+#include "Layer.hxx"
+#include "Config.hxx"
+#include <memory>
 
 class Model
 {

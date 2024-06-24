@@ -1,4 +1,4 @@
-#include "../ActivationFunction/ActivationFunction.hxx"
+#include "ActivationFunction.hxx"
 
 class SoftSignFunction : public ActivationFunction{
 public:

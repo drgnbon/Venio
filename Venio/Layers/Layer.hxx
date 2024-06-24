@@ -1,5 +1,9 @@
+#pragma once
 
-#include "../../ActivationFunctions/ActivationFunction/ActivationFunction.hxx"
+#include "ActivationFunction.hxx"
+#include "RandomGenerator.hxx"
+#include "ErrorLogger.hxx"
+#include "Config.hxx"
 
 class Layer
 {
@@ -11,12 +15,14 @@ protected:
     Matrixd _weights, _weights_gradient;
     ActivationFunction *_activation_function;
     int _layer_size;
+
 public:
     Layer(int layer_size, ActivationFunction *activation_function);
     virtual ~Layer() = default;
     void buildLayer(int output_size_of_last_layer);
     void buildFirstLayer();
     void activateLayer();
+
     virtual void propogateLayer(Matrixd last_layer_output) = 0;
     virtual void backPropogateLayer(Matrixd next_layer_derivation, Matrixd next_layer_values, Matrixd next_layer_weights, Matrixd last_active_values) = 0;
 
