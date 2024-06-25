@@ -20,6 +20,7 @@ Model::Model(LossFunction *loss_function, const std::vector<std::shared_ptr<Laye
 Model::~Model()
 {
     _layers.clear();
+    delete _loss_function;
 }
 
 void Model::addLayer(std::shared_ptr<Layer> layer)
@@ -67,6 +68,9 @@ void Model::forwardPropogation()
 }
 void Model::backPropogation(Matrixd right_answer)
 {
+
+    _last_right_answer = right_answer;
+
     Matrixd dt, dw, dh, df, db;
     Matrixd dx = getDerivationLossForLastLayer(std::move(right_answer));
 
@@ -89,6 +93,42 @@ void Model::backPropogation(Matrixd right_answer)
         _layers[i]->setLayerBiasGradient(db);
     }
     // Do work------------------------------------------------------------------
+}
+
+void Model::backPropogation(){
+
+    Matrixd dt, dw, dh, df, db, dx;
+
+    try{
+        dx = getDerivationLossForLastLayer(_last_right_answer);
+    }
+    catch(std::exception e){
+        std::cout << "Warning _last_right_answer not detected\n" << e.what() << "\n";
+        system("pause");
+        exit(0);
+    }
+
+    
+    
+
+    for (int i = _model_size - 1; i >= 1; --i)
+    {
+
+        dh = dx;
+        df = _layers[i]->getLayerDerivationMatrix();
+
+        dt = dh.array() * df.array();
+
+        dw = _layers[i - 1]->getLayerActiveValues().transpose() * dt; //
+
+        dx = dt * _layers[i]->getLayerWeights().transpose();
+
+        db = dt;
+
+        _layers[i]->setLayerDerivation(dt);
+        _layers[i]->setLayerWeightsGradient(dw);
+        _layers[i]->setLayerBiasGradient(db);
+    }
 }
 
 // getters & setters for class Model---------------------------------------------------------------------
@@ -118,10 +158,13 @@ void Model::setLayerWeights(size_t number_of_layer, Matrixd new_weights_matrix)
 }
 void Model::setLayerActivationFunction(size_t number_of_layer, ActivationFunction *new_activation_function)
 {
+
+    //Warning---------------------------------------
     _layers[number_of_layer]->setLayerActivationFunction(new_activation_function);
 }
 void Model::setModelLossFunction(LossFunction *new_loss_function)
 {
+    //Warning---------------------------------------
     _loss_function = new_loss_function;
 }
 

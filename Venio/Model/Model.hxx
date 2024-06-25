@@ -12,6 +12,7 @@ private:
     LossFunction *_loss_function;
     std::vector<std::shared_ptr<Layer>> _layers;
     size_t _model_size;
+    Matrixd _last_right_answer;
 
 public:
     Model(LossFunction *loss_function, const std::vector<std::shared_ptr<Layer>> &layers);
@@ -23,6 +24,7 @@ public:
 
     void forwardPropogation();
     void backPropogation(Matrixd right_answer);
+    void backPropogation();
 
     // getters & setters for class Model---------------------------------------------------------------------
     void setInput(Matrixd input);

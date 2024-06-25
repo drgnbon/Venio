@@ -6,6 +6,9 @@ Layer::Layer(int layer_size, ActivationFunction *activation_function)
     _activation_function = activation_function;
 }
 
+//Add destructor!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 void Layer::buildLayer(int output_size_of_last_layer)
 {
     // Генерация случайных весов для связей между слоями

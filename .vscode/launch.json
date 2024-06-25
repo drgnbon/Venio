@@ -5,7 +5,7 @@
             "name": "Debug with g++",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Venio.exe", // Путь к исполняемому файлу после компиляции
+            "program": "${workspaceFolder}/build/Main.exe", // Путь к исполняемому файлу после компиляции
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
