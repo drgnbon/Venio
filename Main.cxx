@@ -21,10 +21,19 @@ int main()
     b.setConstant(0.1);
 
     network.setInput(a);
+
+    GD gd(network);
+    ADAM adam(network);
+
+    int epoch = 1;
+
     while (true)
     {
+
         network.forwardPropogation();
         network.backPropogation(b);
+        gd.updateWeights(0.01, epoch);
         std::cout << network.getOutput() << "\n";
+        ++epoch;
     }
 }
