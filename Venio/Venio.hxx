@@ -1,9 +1,9 @@
 #pragma once
 
 #include "ErrorLogger/ErrorLogger.hxx"         //delete later
-#include "CPUKernel/CPUKernel.hxx"             //delete later
 #include "RandomGenerator/RandomGenerator.hxx" //delete later
 #include "Kernel.hxx"                          //delete later
+#include "BenchMark.hxx"                       //delete later
 
 #include "ActivationFunctions/LinearFunction/LinearFunction.hxx"
 #include "ActivationFunctions/LogisticFunction/LogisticFunction.hxx"

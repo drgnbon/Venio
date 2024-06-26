@@ -50,6 +50,7 @@ public:
     Matrixd getOutput();
     Matrixd getInput();
     size_t getLayersSize();
+    double getAverageLoss(const Matrixd& right_answer);
 
     // getters & setters for class Model---------------------------------------------------------------------
 };

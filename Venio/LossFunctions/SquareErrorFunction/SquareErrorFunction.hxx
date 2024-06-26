@@ -1,3 +1,4 @@
+#pragma once
 #include "LossFunction.hxx"
 
 class SquareErrorFunction : public LossFunction {

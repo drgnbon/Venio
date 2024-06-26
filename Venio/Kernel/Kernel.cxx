@@ -24,6 +24,11 @@ Matrixd Kernel::elementwiseMultiplyMatrices(const Matrixd &a, const Matrixd &b)
 }
 // Matrixd Kernel::elementwiseProductMatrices(); // not supported
 
+Matrixd Kernel::multiplyScalarToElements(Matrixd a, double s)
+{
+    return a * s;
+}
+
 Matrixd Kernel::applyFunctionToElements(Matrixd a, double (*foo)(double))
 {
     for (size_t i = 0; i < a.cols(); ++i)

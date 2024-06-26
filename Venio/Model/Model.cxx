@@ -221,5 +221,9 @@ size_t Model::getLayersSize()
 {
     return _layers.size();
 }
+double Model::getAverageLoss(const Matrixd& right_answer)
+{
+    return _loss_function->getMediumLoss(_layers[getLayersSize()-1]->getLayerActiveValues(),right_answer);
+}
 
 // getters & setters for class Model---------------------------------------------------------------------
