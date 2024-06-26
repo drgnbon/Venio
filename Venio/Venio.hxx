@@ -1,8 +1,9 @@
 #pragma once
 
-#include "ErrorLogger/ErrorLogger.hxx" //delete later
-#include "CPUKernel/CPUKernel.hxx" //delete later
+#include "ErrorLogger/ErrorLogger.hxx"         //delete later
+#include "CPUKernel/CPUKernel.hxx"             //delete later
 #include "RandomGenerator/RandomGenerator.hxx" //delete later
+#include "Kernel.hxx"                          //delete later
 
 #include "ActivationFunctions/LinearFunction/LinearFunction.hxx"
 #include "ActivationFunctions/LogisticFunction/LogisticFunction.hxx"
@@ -22,10 +23,8 @@
 #include "ActivationFunctions/SoftPlus/SoftPlus.hxx"
 #include "ActivationFunctions/Sin/Sin.hxx"
 
-
 #include "Layers/ConvolutionLayer/ConvolutionLayer.hxx"
 #include "Layers/SequentialLayer/SequentialLayer.hxx"
-
 
 #include "LossFunctions/SquareErrorFunction/SquareErrorFunction.hxx"
 
@@ -37,6 +36,3 @@
 #include "Optimizers/Adagrad/Adagrad.hxx"
 #include "Optimizers/BFGS/BFGS.hxx"
 #include "Optimizers/RMSProp/RMSProp.hxx"
-
-
-

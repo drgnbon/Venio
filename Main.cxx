@@ -3,7 +3,6 @@
 
 int main()
 {
-
     ArcTg at;
     Benti benti;
     ELU elu;
@@ -22,30 +21,29 @@ int main()
     SoftSignFunction ss;
     TH th;
 
-
     SquareErrorFunction square;
 
     std::vector<std::shared_ptr<Layer>> layers{
-            std::make_shared<SequentialLayer>(20, &linear),
-            std::make_shared<SequentialLayer>(10, &at),
-            std::make_shared<SequentialLayer>(10, &benti),
-            std::make_shared<SequentialLayer>(10, &elu),
-            std::make_shared<SequentialLayer>(10, &gh),
-            std::make_shared<SequentialLayer>(10, &isrlu),
-            std::make_shared<SequentialLayer>(10, &isru),
-            std::make_shared<SequentialLayer>(10, &linear),
-            std::make_shared<SequentialLayer>(10, &logistic),
-            std::make_shared<SequentialLayer>(10, &lrelu),
-            std::make_shared<SequentialLayer>(10, &relu),
-            std::make_shared<SequentialLayer>(10, &selu),
-            std::make_shared<SequentialLayer>(10, &silu),
-            std::make_shared<SequentialLayer>(10, &logistic),
-            std::make_shared<SequentialLayer>(10, &sin),
-            std::make_shared<SequentialLayer>(10, &sinc),
-            std::make_shared<SequentialLayer>(10, &sp),
-            std::make_shared<SequentialLayer>(10, &ss),
-            std::make_shared<SequentialLayer>(10, &th),
-            std::make_shared<SequentialLayer>(1, &linear),
+        std::make_shared<SequentialLayer>(20, &linear),
+        std::make_shared<SequentialLayer>(10, &at),
+        std::make_shared<SequentialLayer>(10, &benti),
+        std::make_shared<SequentialLayer>(10, &elu),
+        std::make_shared<SequentialLayer>(10, &gh),
+        std::make_shared<SequentialLayer>(10, &isrlu),
+        std::make_shared<SequentialLayer>(10, &isru),
+        std::make_shared<SequentialLayer>(10, &linear),
+        std::make_shared<SequentialLayer>(10, &logistic),
+        std::make_shared<SequentialLayer>(10, &lrelu),
+        std::make_shared<SequentialLayer>(10, &relu),
+        std::make_shared<SequentialLayer>(10, &selu),
+        std::make_shared<SequentialLayer>(10, &silu),
+        std::make_shared<SequentialLayer>(10, &logistic),
+        std::make_shared<SequentialLayer>(10, &sin),
+        std::make_shared<SequentialLayer>(10, &sinc),
+        std::make_shared<SequentialLayer>(10, &sp),
+        std::make_shared<SequentialLayer>(10, &ss),
+        std::make_shared<SequentialLayer>(10, &th),
+        std::make_shared<SequentialLayer>(1, &linear),
     };
 
     Model network(&square, layers);
@@ -57,16 +55,14 @@ int main()
 
     network.setInput(a);
 
-    //Check indexation in optimizer very important
+    // Check indexation in optimizer very important
 
     GD f(network);
-    //ADAM f(network);
-    //BFGS f(network);
-    //Adadelta f(network);
-    //Adagrad f(network);
-    //RMSProp f(network);
-
-
+    // ADAM f(network);
+    // BFGS f(network);
+    // Adadelta f(network);
+    // Adagrad f(network);
+    // RMSProp f(network);
 
     int epoch = 1;
 

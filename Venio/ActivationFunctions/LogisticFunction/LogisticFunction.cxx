@@ -1,4 +1,5 @@
 #include "LogisticFunction.hxx"
+#include "Kernel.hxx"
 
 double LogisticFunction::toActivateValue(double x)
 {
