@@ -1,3 +1,4 @@
+#pragma once
 #include "ActivationFunction.hxx"
 
 class SoftPlus : public ActivationFunction

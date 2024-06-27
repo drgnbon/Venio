@@ -1,4 +1,5 @@
- #include "Optimizer.hxx"
+#pragma once
+#include "Optimizer.hxx"
 
  class ADAM : public Optimizer
  {

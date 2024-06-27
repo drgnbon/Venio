@@ -1,3 +1,4 @@
+#pragma once
 #include "Optimizer.hxx"
 
 typedef Eigen::VectorXd Vector;

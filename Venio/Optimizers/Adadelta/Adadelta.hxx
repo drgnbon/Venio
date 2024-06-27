@@ -1,3 +1,4 @@
+#pragma once
 #include "Optimizer.hxx"
 
 class Adadelta : public Optimizer
