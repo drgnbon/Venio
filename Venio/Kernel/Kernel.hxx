@@ -5,17 +5,21 @@
 #include <Eigen\Core>
 typedef Eigen::MatrixXd Matrixd;
 
-class Kernel
+namespace Kernel
 {
-public:
-    static Matrixd multiplyMatrices(const Matrixd &a, const Matrixd &b);
-    static Matrixd divideMatrices(const Matrixd &a, const Matrixd &b); // not supported
-    static Matrixd addMatrices(const Matrixd &a, const Matrixd &b);
-    static Matrixd subtractMatrices(const Matrixd &a, const Matrixd &b);
-    static Matrixd transposeMatrix(const Matrixd &a);
-    static Matrixd elementwiseMultiplyMatrices(const Matrixd &a, const Matrixd &b);
-    static Matrixd elementwiseProductMatrices(); // not supported
-    static Matrixd multiplyScalarToElements(Matrixd a, double s);
 
-    static Matrixd applyFunctionToElements(Matrixd a, double (*foo)(double));
+
+
+    Matrixd multiply(const Matrixd &a, const Matrixd &b);
+    //Matrixd divideMatrices(const Matrixd &a, const Matrixd &b); // not supported
+    Matrixd sum(const Matrixd& a, const Matrixd& b);
+    Matrixd sub(const Matrixd &a, const Matrixd &b);
+    Matrixd transpose(const Matrixd &a);
+    Matrixd eMultiply(const Matrixd &a, const Matrixd &b);
+    //Matrixd elementwiseProductMatrices(); // not supported
+    Matrixd scalarMultiply(Matrixd a, double s);
+
+    Matrixd applyFunctionToElements(Matrixd a, double (*foo)(double));
+
+
 };

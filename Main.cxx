@@ -1,24 +1,46 @@
+#define CPU_OPTIMIZATION
 #include "Venio\Venio.hxx"
 #include <iostream>
 
+
 // To Do
 /*
-1.Add Kernel to optimizer
+1. Add Kernel to optimizers
 {
-
+    adadelta
+    adagrad
+    adam
+    bfgs (!!!!!Do only Andrey!!!!!)
+    rmsprop
 }
-
-2.Add Kernel to Model -
-3.Add Kernel to Loss Function -
-4.Add Kernel to Loss Layers -
+2.Add Bias to optimizers{
+    adadelta
+    adagrad
+    adam
+    bfgs (!!!!!Do only Andrey!!!!!)
+    gd
+    rmsprop
+}
+3.Add Kernel to Model -
+4.Add Kernel to Loss Function -
 5.Add Kernel to ActivationFunctions -
 
-//add #pragma one in ALL headers
+
 */
 // To Do
 
+
+
 int main()
 {
+
+    /*Matrixd a(1, 1);
+    a.setConstant(0.1);
+    Matrixd b(1, 1);
+    b.setConstant(0.1);
+
+    Kernel::sum(a, b);*/
+
     BenchMark::benchSequentialLayer();
 
 

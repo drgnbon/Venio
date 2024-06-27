@@ -4,3 +4,4 @@
 #include "Kernel.hxx"
 
 typedef Eigen::MatrixXd Matrixd;
+namespace K = Kernel;
