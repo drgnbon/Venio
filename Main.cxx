@@ -1,4 +1,5 @@
 #define CPU_OPTIMIZATION
+#include "ADAM.cxx"
 #include "Venio\Venio.hxx"
 #include <iostream>
 
@@ -24,7 +25,8 @@
 3.Add Kernel to Model -
 4.Add Kernel to Loss Function -
 5.Add Kernel to ActivationFunctions -
-
+6.add Bias to RMSProp
+7.check bias if ADAM
 
 */
 // To Do
@@ -41,63 +43,58 @@ int main()
 
     Kernel::sum(a, b);*/
 
-    BenchMark::benchSequentialLayer();
+    //BenchMark::benchSequentialLayer();
     //Eigen::setNbThreads(12);
 
 
-    //LogisticFunction logistic; // pass
-    //SquareErrorFunction square;
+    LogisticFunction logistic; // pass
+    SquareErrorFunction square;
 
-    //std::vector<std::shared_ptr<Layer>> layers{
-    //    std::make_shared<SequentialLayer>(400, &logistic),
-    //    std::make_shared<SequentialLayer>(2000, &logistic),
-    //    std::make_shared<SequentialLayer>(1, &logistic),
-    //};
+    std::vector<std::shared_ptr<Layer>> layers{
+        std::make_shared<SequentialLayer>(4000, &logistic),
+        std::make_shared<SequentialLayer>(200, &logistic),
+        std::make_shared<SequentialLayer>(1, &logistic),
+    };
 
 
     //
 
 
 
-    //Model network(&square, layers);
-    //Matrixd a(1, 400);
-    //a.setConstant(0.1);
-    //Matrixd b(1, 1);
-    //b.setConstant(0.1);
+    Model network(&square, layers);
+    Matrixd a(1, 4000);
+    a.setConstant(0.1);
+    Matrixd b(1, 1);
+    b.setConstant(0.1);
 
 
-    //Matrixd d = a / 3;
 
-    //network.setInput(a);
+    network.setInput(a);
 
-    //ADAM f(network);
+    ADAM f(network);
 
-    //int epoch = 1;
-
-
-    //auto t = clock();
-
-    //while (true)
-    //{
-    //    
-    //    network.forwardPropogation();
-    //    network.backPropogation(b);
-    //    f.updateWeights(0.00005, epoch);
-    //    std::cout << network.getOutput() << "\n";
-
-    //    if(network.getAverageLoss(b) < 0.000001)
-    //    {
-    //        std::system("cls");
-    //        std::cout << clock() - t << " " << epoch << "\n";
-    //        std::cout << network.getOutput() << "\n";
-    //        system("pause");     
-    //    }
-    //    //33341 146
-    //    //51224 144
+    int epoch = 1;
 
 
-    //    ++epoch;
-    //}
+    auto t = clock();
+
+    while (true)
+    {
+        
+        network.forwardPropogation();
+        network.backPropogation(b);
+        f.updateWeights(0.00005, epoch);
+        std::cout << network.getOutput() << "\n";
+
+        if(network.getAverageLoss(b) < 0.000001)
+        {
+            std::system("cls");
+            std::cout << clock() - t << " " << epoch << "\n";
+            std::cout << network.getOutput() << "\n";
+            system("pause");     
+        }
+        ++epoch;
+    }
 
     //     ArcTg at;
     //     Benti benti;
