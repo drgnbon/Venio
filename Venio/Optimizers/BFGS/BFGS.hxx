@@ -13,8 +13,6 @@ public:
         _new_gradient = new Vector[network.getLayersSize()];
         _old_weights  = new Vector[network.getLayersSize()];
         _new_weights  = new Vector[network.getLayersSize()];
-        y = new Vector[network.getLayersSize()];
-        s = new Vector[network.getLayersSize()];
         ro = 0;
 
         for(int i  = 0;i < network.getLayersSize();++i)
@@ -23,8 +21,6 @@ public:
                                                     network.getLayerWeights(i).size());
 
             I[i] =  _inversed_hessian[i];
-            y[i] =  Vector::Zero(network.getLayerWeights(i).size());
-            s[i] =  Vector::Zero(network.getLayerWeights(i).size());
             _old_gradient[i] = Vector::Zero(network.getLayerWeights(i).size());
             _new_gradient[i] = Vector::Zero(network.getLayerWeights(i).size());
             _old_weights[i]  = Vector::Zero(network.getLayerWeights(i).size());
@@ -35,8 +31,9 @@ public:
     ~BFGS();
     void updateWeights(double learning_speed, double epoch) override;
 private:
+    Matrixd _layer_weights, _layer_weights_gradient;
     Matrixd *_inversed_hessian,*I;
-    Vector *y,*s,*_old_gradient,*_old_weights,*_new_weights,*_new_gradient;
+    Vector y,s,*_old_gradient,*_old_weights,*_new_weights,*_new_gradient;
     double ro;
 };
 

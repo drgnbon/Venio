@@ -41,63 +41,63 @@ int main()
 
     Kernel::sum(a, b);*/
 
-    //BenchMark::benchSequentialLayer();
-    Eigen::setNbThreads(12);
+    BenchMark::benchSequentialLayer();
+    //Eigen::setNbThreads(12);
 
 
-    LogisticFunction logistic; // pass
-    SquareErrorFunction square;
+    //LogisticFunction logistic; // pass
+    //SquareErrorFunction square;
 
-    std::vector<std::shared_ptr<Layer>> layers{
-        std::make_shared<SequentialLayer>(400, &logistic),
-        std::make_shared<SequentialLayer>(2000, &logistic),
-        std::make_shared<SequentialLayer>(1, &logistic),
-    };
-
-
-    
+    //std::vector<std::shared_ptr<Layer>> layers{
+    //    std::make_shared<SequentialLayer>(400, &logistic),
+    //    std::make_shared<SequentialLayer>(2000, &logistic),
+    //    std::make_shared<SequentialLayer>(1, &logistic),
+    //};
 
 
-
-    Model network(&square, layers);
-    Matrixd a(1, 400);
-    a.setConstant(0.1);
-    Matrixd b(1, 1);
-    b.setConstant(0.1);
+    //
 
 
-    Matrixd d = a / 3;
 
-    network.setInput(a);
-
-    ADAM f(network);
-
-    int epoch = 1;
-
-
-    auto t = clock();
-
-    while (true)
-    {
-        
-        network.forwardPropogation();
-        network.backPropogation(b);
-        f.updateWeights(0.00005, epoch);
-        std::cout << network.getOutput() << "\n";
-
-        if(network.getAverageLoss(b) < 0.000001)
-        {
-            std::system("cls");
-            std::cout << clock() - t << " " << epoch << "\n";
-            std::cout << network.getOutput() << "\n";
-            system("pause");     
-        }
-        //33341 146
-        //51224 144
+    //Model network(&square, layers);
+    //Matrixd a(1, 400);
+    //a.setConstant(0.1);
+    //Matrixd b(1, 1);
+    //b.setConstant(0.1);
 
 
-        ++epoch;
-    }
+    //Matrixd d = a / 3;
+
+    //network.setInput(a);
+
+    //ADAM f(network);
+
+    //int epoch = 1;
+
+
+    //auto t = clock();
+
+    //while (true)
+    //{
+    //    
+    //    network.forwardPropogation();
+    //    network.backPropogation(b);
+    //    f.updateWeights(0.00005, epoch);
+    //    std::cout << network.getOutput() << "\n";
+
+    //    if(network.getAverageLoss(b) < 0.000001)
+    //    {
+    //        std::system("cls");
+    //        std::cout << clock() - t << " " << epoch << "\n";
+    //        std::cout << network.getOutput() << "\n";
+    //        system("pause");     
+    //    }
+    //    //33341 146
+    //    //51224 144
+
+
+    //    ++epoch;
+    //}
 
     //     ArcTg at;
     //     Benti benti;

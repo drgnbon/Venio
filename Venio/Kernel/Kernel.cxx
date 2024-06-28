@@ -66,7 +66,12 @@ namespace Kernel {
     {
         return a * s;
     }
-
+    Matrixd scalarMultiply(double s, Matrixd a) {
+        return a * s;
+    }
+    double dot(Eigen::VectorXd a, Eigen::VectorXd b) {
+        return a.dot(b);
+    }
 
     /// <param name="a"> - matrix.array()</param>
     /// <param name="b"> - scalar </param>

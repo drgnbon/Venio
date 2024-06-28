@@ -55,7 +55,7 @@ void ADAM::updateWeights(double learning_speed, double epoch)
 
         Arrayd _history_speed_weights_corrected = K::scalarDivide(_history_speed_weights[i], modified_gamma_epoch);
 
-        Arrayd _history_moment_weights_corrected = K::scalarDivide(_history_moment_weights[i].array(), modified_alfa_epoch).array().sqrt() + _epsilon;
+        Arrayd _history_moment_weights_corrected = K::scalarDivide(_history_moment_weights[i], modified_alfa_epoch).array().sqrt() + _epsilon;
 
         _network.setLayerWeights(i, K::sub(_network.getLayerWeights(i),K::scalarMultiply(K::divideArrays(_history_speed_weights_corrected, _history_moment_weights_corrected), learning_speed)));
 
@@ -67,18 +67,9 @@ void ADAM::updateWeights(double learning_speed, double epoch)
 
         Arrayd _history_speed_bias_corrected = K::scalarDivide(_history_speed_bias[i], modified_gamma_epoch);
 
-        Arrayd _history_moment_bias_corrected = K::scalarDivide(_history_moment_bias[i].array(), modified_alfa_epoch).array().sqrt() + _epsilon;
+        Arrayd _history_moment_bias_corrected = K::scalarDivide(_history_moment_bias[i], modified_alfa_epoch).array().sqrt() + _epsilon;
 
         _network.setLayerBias(i, K::sub(_network.getLayerBias(i), K::scalarMultiply(K::divideArrays(_history_speed_bias_corrected, _history_moment_bias_corrected), learning_speed)));
-
-        
-
-
-
-
-
-
-
 
 
     }

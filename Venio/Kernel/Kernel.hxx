@@ -26,6 +26,9 @@ namespace Kernel
     Matrixd eMultiply(const Matrixd &a, const Matrixd &b);
     //Matrixd elementwiseProductMatrices(); // not supported
     Matrixd scalarMultiply(Matrixd a, double s);
+    Matrixd scalarMultiply(double s, Matrixd a);
+    double dot(Eigen::VectorXd a, Eigen::VectorXd b);
+
 
     Arrayd scalarSum(Arrayd a, double s);
 
