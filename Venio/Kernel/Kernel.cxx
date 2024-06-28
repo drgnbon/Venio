@@ -9,7 +9,20 @@ namespace Kernel {
     {
         return a * b;
     }
-    // Matrixd Kernel::divideMatrices(const Matrixd &a, const Matrixd &b); // not supported
+
+
+
+    Arrayd Kernel::divideArrays(const Arrayd& a, const Arrayd& b)
+    {
+        return a / b;
+    }
+
+
+    Matrixd scalarDivide(const Matrixd& a, double s) 
+    {
+        return a / s;
+    }
+
 
 
     /// <param name="a"> - element 1</param>
@@ -53,6 +66,16 @@ namespace Kernel {
     {
         return a * s;
     }
+
+
+    /// <param name="a"> - matrix.array()</param>
+    /// <param name="b"> - scalar </param>
+    /// <returns>Returns result of scalar sum (matrix and scalar) </returns>
+    Arrayd scalarSum(Arrayd a, double s)
+    {
+        return a.array() + s;
+    }
+
 
 
     /// <param name="a"> - matrix</param>

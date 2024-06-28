@@ -15,6 +15,8 @@ Matrixd RandomGenerator::generateRandomMatrix(double min_rnd, double max_rnd, si
     std::random_device random_device;
     std::mt19937 gen(random_device());
     std::mt19937 gen2(1);
+    std::mt19937 gen3(std::rand());
+
 
     std::uniform_real_distribution<double> rng_coin(min_rnd, max_rnd);
     Matrixd matrix(rows, cols);
@@ -22,7 +24,7 @@ Matrixd RandomGenerator::generateRandomMatrix(double min_rnd, double max_rnd, si
     {
         for (long long j = 0; j < cols; ++j)
         {
-            matrix(i, j) = rng_coin(gen2);
+            matrix(i, j) = rng_coin(gen3);
         }
     }
     return matrix;

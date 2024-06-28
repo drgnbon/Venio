@@ -16,10 +16,10 @@
 2.Add Bias to optimizers{
     adadelta
     adagrad
-    adam
+    adam - complete
     bfgs (!!!!!Do only Andrey!!!!!)
-    gd
-    rmsprop
+    gd 
+    rmsprop 
 }
 3.Add Kernel to Model -
 4.Add Kernel to Loss Function -
@@ -41,36 +41,61 @@ int main()
 
     Kernel::sum(a, b);*/
 
-    BenchMark::benchSequentialLayer();
+    //BenchMark::benchSequentialLayer();
 
 
-    // LogisticFunction logistic; // pass
-    // SquareErrorFunction square;
+    LogisticFunction logistic; // pass
+    SquareErrorFunction square;
 
-    // std::vector<std::shared_ptr<Layer>> layers{
-    //     std::make_shared<SequentialLayer>(400, &logistic),
-    //     std::make_shared<SequentialLayer>(200, &logistic),
-    //     std::make_shared<SequentialLayer>(1, &logistic),
-    // };
-    // Model network(&square, layers);
-    // Matrixd a(1, 400);
-    // a.setConstant(0.1);
-    // Matrixd b(1, 1);
-    // b.setConstant(0.1);
+    std::vector<std::shared_ptr<Layer>> layers{
+        std::make_shared<SequentialLayer>(400, &logistic),
+        std::make_shared<SequentialLayer>(2000, &logistic),
+        std::make_shared<SequentialLayer>(1, &logistic),
+    };
 
-    // GD f(network);
 
-    // int epoch = 1;
+    
 
-    // while (true)
-    // {
 
-    //     network.forwardPropogation();
-    //     network.backPropogation(b);
-    //     f.updateWeights(0.005, epoch);
-    //     std::cout << network.getOutput() << "\n";
-    //     ++epoch;
-    // }
+
+    Model network(&square, layers);
+    Matrixd a(1, 400);
+    a.setConstant(0.1);
+    Matrixd b(1, 1);
+    b.setConstant(0.1);
+
+
+    Matrixd d = a / 3;
+
+    network.setInput(a);
+
+    ADAM f(network);
+
+    int epoch = 1;
+
+
+    auto t = clock();
+
+    while (true)
+    {
+        
+        network.forwardPropogation();
+        network.backPropogation(b);
+        f.updateWeights(0.00005, epoch);
+        std::cout << network.getOutput() << "\n";
+
+        if(network.getAverageLoss(b) < 0.000001)
+        {
+            std::system("cls");
+            std::cout << clock() - t << " " << epoch << "\n";
+            std::cout << network.getOutput() << "\n";
+            system("pause");     
+        }
+        //850 34
+
+
+        ++epoch;
+    }
 
     //     ArcTg at;
     //     Benti benti;
