@@ -18,8 +18,10 @@ void ADAM::updateWeights(double learning_speed, double epoch)
         Matrixd bias_gradient_squared = bias_gradient.array().square();
 
 
-        _history_speed_weights[i] = (_gamma * _history_speed_weights[i]) + 
-            (modified_gamma * weights_gradient);
+
+#ifdef CPU_OPTIMIZATION
+        _history_speed_weights[i] = _gamma * _history_speed_weights[i] + 
+            modified_gamma * weights_gradient;
 
         _history_moment_weights[i] = _alfa * _history_moment_weights[i] +
             modified_alfa * weights_gradient_squared;
@@ -31,16 +33,9 @@ void ADAM::updateWeights(double learning_speed, double epoch)
 
         _network.setLayerWeights(i,_network.getLayerWeights(i) - (_history_speed_weights_corrected / _history_moment_weights_corrected).matrix() * learning_speed);
 
-
-
-
-
-
-
-
-        //bias
-        _history_speed_bias[i] = (_gamma * _history_speed_bias[i]) +
-            (modified_gamma * bias_gradient);
+     
+        _history_speed_bias[i] = _gamma * _history_speed_bias[i] +
+            modified_gamma * bias_gradient;
 
         _history_moment_bias[i] = _alfa * _history_moment_bias[i] +
             modified_alfa * bias_gradient_squared;
@@ -49,40 +44,42 @@ void ADAM::updateWeights(double learning_speed, double epoch)
 
         Arrayd _history_moment_bias_corrected = (_history_moment_bias[i].array() / modified_alfa_epoch).sqrt() + _epsilon;
 
-
         _network.setLayerBias(i, _network.getLayerBias(i) - (_history_speed_bias_corrected / _history_moment_bias_corrected).matrix() * learning_speed);
+#endif
 
 
 
+        _history_speed_weights[i] = K::sum(K::scalarMultiply(_history_speed_weights[i], _gamma), K::scalarMultiply(weights_gradient, modified_gamma));
+
+        _history_moment_weights[i] = K::sum(K::scalarMultiply(_history_moment_weights[i], _alfa), K::scalarMultiply(weights_gradient_squared, modified_alfa));
+
+        Arrayd _history_speed_weights_corrected = K::scalarDivide(_history_speed_weights[i], modified_gamma_epoch);
+
+        Arrayd _history_moment_weights_corrected = K::scalarDivide(_history_moment_weights[i].array(), modified_alfa_epoch).array().sqrt() + _epsilon;
+
+        _network.setLayerWeights(i, K::sub(_network.getLayerWeights(i),K::scalarMultiply(K::divideArrays(_history_speed_weights_corrected, _history_moment_weights_corrected), learning_speed)));
 
 
 
+        _history_speed_bias[i] = K::sum(K::scalarMultiply(_history_speed_bias[i], _gamma), K::scalarMultiply(bias_gradient, modified_gamma));
 
+        _history_moment_bias[i] = K::sum(K::scalarMultiply(_history_moment_bias[i], _alfa), K::scalarMultiply(bias_gradient_squared, modified_alfa));
 
+        Arrayd _history_speed_bias_corrected = K::scalarDivide(_history_speed_bias[i], modified_gamma_epoch);
 
+        Arrayd _history_moment_bias_corrected = K::scalarDivide(_history_moment_bias[i].array(), modified_alfa_epoch).array().sqrt() + _epsilon;
 
-
-
-
-
-
-
-
-
-        //_history_speed_bias[i] = (_gamma * _history_speed_bias[i]) + ((1 - _gamma) * _network.getLayerBiasGradient(i));
-        //_history_moment_bias[i] = (_alfa * _history_moment_bias[i]) + Eigen::MatrixXd((1 - _alfa) * _network.getLayerBiasGradient(i).array().pow(2));
-        //_network.setLayerBias(i, _network.getLayerBias(i) - learning_speed * Eigen::MatrixXd((_history_speed_bias[i] / (1 - pow(_gamma, epoch + 1))).array().cwiseQuotient((_history_moment_bias[i] / (1 - pow(_alfa, epoch + 1))).array().sqrt() + _epsilon).array()));
-
-
-
-
-
-        //_history_speed[i] = K::sum(K::scalarMultiply(_history_speed[i], _gamma),K::scalarMultiply(_network.getLayerWeightsGradient(i), (1 - _gamma)));
-        //_history_moment[i] = K::sum(K::scalarMultiply(_history_moment[i], _alfa),Matrixd(K::scalarMultiply(_network.getLayerWeightsGradient(i).array().pow(2), (1 - _alfa))));
-        //_network.setLayerWeights(i,K::sub(_network.getLayerWeights(i),K::scalarMultiply(Matrixd(K::divideArrays(K::scalarDivide(_history_speed[i], (1 - pow(_gamma, epoch + 1))).array(), K::scalarSum(K::scalarDivide(_history_moment[i], (1 - pow(_alfa, epoch + 1))).array().sqrt(), _epsilon).array())), learning_speed)));
-        
+        _network.setLayerBias(i, K::sub(_network.getLayerBias(i), K::scalarMultiply(K::divideArrays(_history_speed_bias_corrected, _history_moment_bias_corrected), learning_speed)));
 
         
+
+
+
+
+
+
+
+
 
     }
 }

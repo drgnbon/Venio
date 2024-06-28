@@ -4,15 +4,6 @@
  class ADAM : public Optimizer
  {
  public:
-     Matrixd *_history_speed_weights;
-     Matrixd *_history_moment_weights;
-     Matrixd* _history_speed_bias;
-     Matrixd* _history_moment_bias;
-
-     double _gamma = 0.9;
-     double _alfa = 0.999;
-     double _epsilon = 1e-8;
-
      explicit ADAM(Model& network) : Optimizer(network)
      {   
          _network = network;
@@ -41,6 +32,16 @@
      }
 
      void updateWeights(double learning_speed, double epoch) override;
+
+ private:
+     Matrixd* _history_speed_weights;
+     Matrixd* _history_moment_weights;
+     Matrixd* _history_speed_bias;
+     Matrixd* _history_moment_bias;
+
+     double _gamma = 0.9;
+     double _alfa = 0.999;
+     double _epsilon = 1e-8;
  };
 
 

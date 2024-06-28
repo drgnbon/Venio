@@ -42,6 +42,7 @@ int main()
     Kernel::sum(a, b);*/
 
     //BenchMark::benchSequentialLayer();
+    Eigen::setNbThreads(12);
 
 
     LogisticFunction logistic; // pass
@@ -91,7 +92,8 @@ int main()
             std::cout << network.getOutput() << "\n";
             system("pause");     
         }
-        //850 34
+        //33341 146
+        //51224 144
 
 
         ++epoch;
