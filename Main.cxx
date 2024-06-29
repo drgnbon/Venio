@@ -1,5 +1,5 @@
-#define CPU_OPTIMIZATION
-#include "ADAM.cxx"
+#define GPU_OPTIMIZATION
+#include "RMSProp.cxx"
 #include "Venio\Venio.hxx"
 #include <iostream>
 
@@ -52,12 +52,12 @@ int main()
 
     std::vector<std::shared_ptr<Layer>> layers{
         std::make_shared<SequentialLayer>(4000, &logistic),
-        std::make_shared<SequentialLayer>(200, &logistic),
+        std::make_shared<SequentialLayer>(2000, &logistic),
         std::make_shared<SequentialLayer>(1, &logistic),
     };
 
 
-    //
+
 
 
 
@@ -71,7 +71,7 @@ int main()
 
     network.setInput(a);
 
-    ADAM f(network);
+    RMSProp f(network);
 
     int epoch = 1;
 
@@ -86,7 +86,7 @@ int main()
         f.updateWeights(0.00005, epoch);
         std::cout << network.getOutput() << "\n";
 
-        if(network.getAverageLoss(b) < 0.000001)
+        if(network.getAverageLoss(b) < 0.00001)
         {
             std::system("cls");
             std::cout << clock() - t << " " << epoch << "\n";
