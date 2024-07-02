@@ -1,26 +1,18 @@
 #define GPU_OPTIMIZATION
 #include "ADAM.cxx"
+#include "Adagrad.cxx"
+#include "Adadelta.cxx"
 #include "Venio\Venio.hxx"
 #include <iostream>
 
 
 // To Do
 /*
-1. Add Kernel to optimizers
-{
-    adadelta
-    adagrad
-    adam
-    bfgs (!!!!!Do only Andrey!!!!!)
-    rmsprop
-}
+
 2.Add Bias to optimizers{
-    adadelta
     adagrad
-    adam - complete
     bfgs (!!!!!Do only Andrey!!!!!)
-    gd 
-    rmsprop 
+
 }
 3.Add Kernel to Model -
 4.Add Kernel to Loss Function -
@@ -38,6 +30,7 @@
 int main()
 {
 
+
     /*Matrixd a(1, 1);
     a.setConstant(0.1);
     Matrixd b(1, 1);
@@ -46,7 +39,7 @@ int main()
     Kernel::sum(a, b);*/
 
     //BenchMark::benchSequentialLayer();
-    //Eigen::setNbThreads(12);
+    Eigen::setNbThreads(2);
 
 
     LogisticFunction logistic; // pass
@@ -73,7 +66,8 @@ int main()
 
     network.setInput(a);
 
-    ADAM f(network);
+    Adagrad f(network);
+    //Adadelta f(network);
 
     int epoch = 0;
 
@@ -85,7 +79,7 @@ int main()
         
         network.forwardPropogation();
         network.backPropogation(b);
-        f.updateWeights(0.00001, epoch);
+        f.updateWeights(0.005, epoch);
         std::cout << network.getOutput() << "\n";
 
         if(network.getAverageLoss(b) < 0.00000000001)
