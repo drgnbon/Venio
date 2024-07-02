@@ -15,7 +15,7 @@ void BFGS::updateWeights(double learning_speed, double epoch)
 
 #ifdef GPU_OPTIMIZATION
         _new_weights[i] = K::sub(_old_weights[i], K::scalarMultiply(learning_speed,
-                                                  K::multiply(_inversed_hessian[i], _old_gradient[i])));
+                                                  K::matrixMultiply(_inversed_hessian[i], _old_gradient[i])));
 #endif    
 #ifdef CPU_OPTIMIZATION
         _new_weights[i] = _old_weights[i] - learning_speed*(_inversed_hessian[i] * _old_gradient[i]);
@@ -37,17 +37,17 @@ void BFGS::updateWeights(double learning_speed, double epoch)
                                               _network.getLayerWeightsGradient(i).size());
 
 
-#ifdef GPU_OPTIMIZATION
+//#ifdef GPU_OPTIMIZATION
         s = K::sub(_new_weights[i],_old_weights[i]);
         y = K::sub(_new_gradient[i],_old_gradient[i]);
         ro = 1 / K::dot(y, s);
 
-        Matrixd a = K::sub(I[i], K::scalarMultiply(ro, K::multiply(s, K::transpose(y))));
-        Matrixd b = K::sub(I[i], K::scalarMultiply(ro, K::multiply(y, K::transpose(s))));
+        Matrixd a = K::sub(I[i], K::scalarMultiply(ro, K::vectorMultiply(s, K::vectorTranspose(y))));
+        Matrixd b = K::sub(I[i], K::scalarMultiply(ro, K::vectorMultiply(y, K::vectorTranspose(s))));
 
 
-        _inversed_hessian[i] = K::multiply(K::multiply(a, _inversed_hessian[i]), b) + K::scalarMultiply(ro, K::multiply(s, K::transpose(s)));
-#endif
+        _inversed_hessian[i] = K::matrixMultiply(K::matrixMultiply(a, _inversed_hessian[i]), b) + K::scalarMultiply(ro, K::vectorMultiply(s, K::vectorTranspose(s)));
+//#endif
 
 
 #ifdef CPU_OPTIMIZATION

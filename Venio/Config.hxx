@@ -5,4 +5,5 @@
 
 typedef Eigen::MatrixXd Matrixd;
 typedef Eigen::ArrayXXd Arrayd;
+typedef Eigen::VectorXd Vectord;
 namespace K = Kernel;

@@ -1,4 +1,6 @@
 #include "Kernel.hxx"
+#include "Kernel.hxx"
+#include "Kernel.hxx"
 
 namespace Kernel {
     //GPU WARNINGS--------------------------------------------------------------------------------------------------
@@ -161,7 +163,21 @@ namespace Kernel {
     {
         return a + b;
     }
-    
+    Matrixd matrixMultiply(const Matrixd& A, const Matrixd& B) {
+        return A * B;
+    }
+
+    Vectord vectorTranspose(const Vectord& a)
+    {
+        return a.transpose();
+    }
+
+    Matrixd vectorMultiply(const Vectord& a, const Vectord& b)
+    {
+        return a*b;
+    }
+
+
 
     Arrayd sqr(const Arrayd& a) {
         return a.square();
@@ -175,10 +191,10 @@ namespace Kernel {
     Arrayd multiplyArrays(const Arrayd& a, const Arrayd& b) {
         return a * b;
     }
-    Matrixd scalarArrayMultiply(const Arrayd& a, double s) {
+    Arrayd scalarArrayMultiply(const Arrayd& a, double s) {
         return s * a;
     }
-    Matrixd scalarArrayMultiply(double s, const Arrayd& a) {
+    Arrayd scalarArrayMultiply(double s, const Arrayd& a) {
         return s * a;
     }
 

@@ -66,7 +66,7 @@ int main()
 
     network.setInput(a);
 
-    Adagrad f(network);
+    BFGS f(network);
     //Adadelta f(network);
 
     int epoch = 0;
