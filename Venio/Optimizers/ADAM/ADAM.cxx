@@ -10,7 +10,7 @@ ADAM::~ADAM()
 
 void ADAM::updateWeights(double learning_speed, double epoch)
 {
-
+    std::cout << epoch << "\n";
     for (int i = 0; i < _network.getLayersSize(); i++)
     {
         _modified_gamma_epoch = 1 - pow(_gamma, epoch + 1);
