@@ -24,18 +24,18 @@ void RMSProp::updateWeights(double learning_speed, double epoch)
 
 
 #ifdef GPU_OPTIMIZATION
-        _squared_gradient_weights[i] = K::sum(K::scalarMultiply(_squared_gradient_weights[i].array(), _gamma), K::scalarMultiply(_weights_gradient.array().square(), _modified_gamma));
+        _squared_gradient_weights[i] = K::sumAA(K::multAS(_squared_gradient_weights[i].array(), _gamma), K::multAS(K::sqrA(_weights_gradient.array()), _modified_gamma));
 
-        Matrixd _squared_gradient_weights_corrected = K::divideArrays(K::scalarMultiply(_weights_gradient, learning_speed).array(), sqrt(K::scalarSum(_squared_gradient_weights[i].array(), _epsilon)));
+        Matrixd _squared_gradient_weights_corrected = K::divAA(K::multMS(_weights_gradient, learning_speed).array(), sqrt(K::sumAS(_squared_gradient_weights[i].array(), _epsilon)));
 
-        _network.setLayerWeights(i, K::sub(_network.getLayerWeights(i), _squared_gradient_weights_corrected));
+        _network.setLayerWeights(i, K::subMM(_network.getLayerWeights(i), _squared_gradient_weights_corrected));
 
 
-        _squared_gradient_bias[i] = K::sum(K::scalarMultiply(_squared_gradient_bias[i].array(), _gamma), K::scalarMultiply(_bias_gradient.array().square(), _modified_gamma));
+        _squared_gradient_bias[i] = K::sumAA(K::multAS(_squared_gradient_bias[i].array(), _gamma), K::multAS(K::sqrA(_bias_gradient.array()), _modified_gamma));
 
-        Matrixd _squared_gradient_bias_corrected = K::divideArrays(K::scalarMultiply(_bias_gradient, learning_speed).array(), sqrt(K::scalarSum(_squared_gradient_bias[i].array(), _epsilon)));
+        Matrixd _squared_gradient_bias_corrected = K::divAA(K::multMS(_bias_gradient, learning_speed).array(), sqrt(K::sumAS(_squared_gradient_bias[i].array(), _epsilon)));
 
-        _network.setLayerBias(i, K::sub(_network.getLayerBias(i), _squared_gradient_bias_corrected));
+        _network.setLayerBias(i, K::subMM(_network.getLayerBias(i), _squared_gradient_bias_corrected));
 #endif
     }
 }

@@ -22,59 +22,57 @@ namespace Kernel
     inline cublasHandle_t getCublasHandle(void* handle) noexcept;
     // ---------}
 
-
-
-
-
-
     //Only matrix{
-    Matrixd matrixMultiply(const Matrixd& A, const Matrixd& B);
-    Matrixd eMultiply(const Matrixd& a, const Matrixd& b);
-    Matrixd scalarMultiply(Matrixd a, double s);
-    Matrixd scalarMultiply(double s,Matrixd a);//remoove it
-    Matrixd scalarDivide(const Matrixd& a, double s);
-    Matrixd sum(const Matrixd& a, const Matrixd& b);
-    Matrixd sub(const Matrixd& a, const Matrixd& b);
-    Matrixd transpose(const Matrixd& a);
+    Matrixd multMM(const Matrixd& A, const Matrixd& B);
+
+    Matrixd emultMM(const Matrixd& a, const Matrixd& b);
+
+    Matrixd multMS(double s, Matrixd a);
+    Matrixd multMS(Matrixd a, double s);
+
+    Matrixd divMS(const Matrixd& a, double s);
+    Matrixd divMS(double s, const Matrixd& a);
+
+    Matrixd sumMM(const Matrixd& a, const Matrixd& b);
+
+    Matrixd subMM(const Matrixd& a, const Matrixd& b);
+
+    Matrixd transposeM(const Matrixd& a); 
     
-    
-    Matrixd applyFunctionToElements(Matrixd a, double (*foo)(double));
-    
+    Matrixd applyFuncMF(Matrixd a, double (*foo)(double));
+    Matrixd applyFuncMF(double (*foo)(double), Matrixd a);
     // -------- }
 
 
-    //Only vector{
-    double dot(Vectord a, Vectord b);
-    Vectord vectorTranspose(const Vectord& a);
-    Matrixd vectorMultiply(const Vectord& a, const Vectord& b);
 
+    //Only vector{
+    double dotVV(Vectord a, Vectord b);
+
+    Vectord transposeV(const Vectord& a);
+
+    Matrixd multVV(const Vectord& a, const Vectord& b);
     // -------- }
 
 
     //Only arrays{
+    Arrayd sqrA(const Arrayd& a);
 
-    Arrayd sqr(const Arrayd& a);
-    Arrayd sqrt(const Arrayd& a);
-    Arrayd scalarAdd(const Arrayd& a, double b);
-    Arrayd multiplyArrays(const Arrayd& a, const Arrayd& b);
-    Arrayd scalarArrayMultiply(const Arrayd& a, double s);
-    Arrayd scalarArrayMultiply(double s, const Arrayd& a);
-    Arrayd divideArrays(const Arrayd& a, const Arrayd& b);
+    Arrayd sqrtA(const Arrayd& a);
 
-    Arrayd scalarSum(Arrayd a, double s);
+    Arrayd sumAA(const Arrayd& a, const Arrayd& b);
 
-    Arrayd scalarSum(Arrayd a, double s);
+    Arrayd sumAS(const Arrayd& a, double b);
+    Arrayd sumAS(double b, const Arrayd& a);
 
+    Arrayd multAA(const Arrayd& a, const Arrayd& b);
+
+    Arrayd multAS(const Arrayd& a, double s);
+    Arrayd multAS(double s, const Arrayd& a);
+
+    Arrayd divAA(const Arrayd& a, const Arrayd& b);
     // -------- }
 
-
+ 
     //others{
-
-
-
-
     // -------- }
-    
-
-
 };

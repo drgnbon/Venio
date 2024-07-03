@@ -27,13 +27,13 @@ void Adagrad::updateWeights(double learning_speed, double epoch)
 
         gradient = _network.getLayerWeightsGradient(i);
 
-        _squared_gradient[i] += Matrixd(gradient.array().square());
-        _network.setLayerWeights(i, K::sub(_network.getLayerWeights(i), K::scalarMultiply(learning_speed, Matrixd(K::divideArrays(gradient.array(), K::sqrt(K::scalarAdd(_squared_gradient[i].array(), _epsilon).array()))))));
+        _squared_gradient[i] += K::sqrA(gradient.array()).matrix();
+        _network.setLayerWeights(i, K::subMM(_network.getLayerWeights(i), K::multMS(learning_speed, (K::divAA(gradient.array(), K::sqrtA(K::sumAS(_squared_gradient[i].array(), _epsilon).array()))).matrix())));
 
         bias_gradient = _network.getLayerBiasGradient(i);
 
-        _squared_bias_gradient[i] += Matrixd(bias_gradient.array().square());
-        _network.setLayerBias(i, K::sub(_network.getLayerBias(i), K::scalarMultiply(learning_speed, Matrixd(K::divideArrays(bias_gradient.array(), K::sqrt(K::scalarAdd(_squared_bias_gradient[i].array(), _epsilon).array()))))));
+        _squared_bias_gradient[i] += K::sqrA(bias_gradient.array()).matrix();
+        _network.setLayerBias(i, K::subMM(_network.getLayerBias(i), K::multMS(learning_speed, (K::divAA(bias_gradient.array(), K::sqrtA(K::sumAS(_squared_bias_gradient[i].array(), _epsilon).array()))).matrix())));
 
     }
 #endif

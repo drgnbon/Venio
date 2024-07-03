@@ -38,25 +38,25 @@ void Adadelta::updateWeights(double learning_speed, double epoch)
     {
         gradient = _network.getLayerWeightsGradient(i);
 
-        _squared_gradient[i] = K::sum( K::scalarArrayMultiply(_gamma , _squared_gradient[i].array() ) , K::scalarArrayMultiply((1 - _gamma) , K::sqr(gradient.array())  ) );
+        _squared_gradient[i] = K::sumAA( K::multAS(_gamma , _squared_gradient[i].array() ) , K::multAS((1 - _gamma) , K::sqrA(gradient.array())  ) );
 
-        delta = K::multiplyArrays(K::divideArrays(K::sqrt(K::scalarAdd(_squared_updates[i].array(), _epsilon)) , K::sqrt(K::scalarAdd(_squared_gradient[i].array(), _epsilon))) , gradient.array());
+        delta = K::multAA(K::divAA(K::sqrtA(K::sumAS(_squared_updates[i].array(), _epsilon)) , K::sqrtA(K::sumAS(_squared_gradient[i].array(), _epsilon))) , gradient.array());
 
-        _squared_updates[i] = K::sum( K::scalarArrayMultiply(_gamma , _squared_updates[i].array() ) , K::scalarArrayMultiply((1 - _gamma) , K::sqr(delta.array()) ) );
+        _squared_updates[i] = K::sumAA( K::multAS(_gamma , _squared_updates[i].array() ) , K::multAS((1 - _gamma) , K::sqrA(delta.array()) ) );
 
-        _network.setLayerWeights(i,_network.getLayerWeights(i)-learning_speed*delta);
+        _network.setLayerWeights(i,K::subMM(_network.getLayerWeights(i),K::multMS(learning_speed,delta)));
 
 
 
         biasGradient = _network.getLayerBiasGradient(i);
 
-        _squared_bias_gradient[i] = K::sum(K::scalarArrayMultiply(_gamma, _squared_bias_gradient[i].array()), K::scalarArrayMultiply((1 - _gamma), K::sqr(biasGradient.array())));
+        _squared_bias_gradient[i] = K::sumAA(K::multAS(_gamma, _squared_bias_gradient[i].array()), K::multAS((1 - _gamma), K::sqrA(biasGradient.array())));
 
-        bias_delta = K::multiplyArrays(K::divideArrays(K::sqrt(K::scalarAdd(_squared_bias_updates[i].array(), _epsilon)), K::sqrt(K::scalarAdd(_squared_bias_gradient[i].array(), _epsilon))), biasGradient.array());
+        bias_delta = K::multAA(K::divAA(K::sqrtA(K::sumAS(_squared_bias_updates[i].array(), _epsilon)), K::sqrtA(K::sumAS(_squared_bias_gradient[i].array(), _epsilon))), biasGradient.array());
         
-        _squared_bias_updates[i] = K::sum(K::scalarArrayMultiply(_gamma, _squared_bias_updates[i].array()), K::scalarArrayMultiply((1 - _gamma), K::sqr(bias_delta.array())));
+        _squared_bias_updates[i] = K::sumAA(K::multAS(_gamma, _squared_bias_updates[i].array()), K::multAS((1 - _gamma), K::sqrA(bias_delta.array())));
 
-        _network.setLayerBias(i, _network.getLayerBias(i) - learning_speed * bias_delta);
+        _network.setLayerBias(i, K::subMM(_network.getLayerBias(i), K::multMS(learning_speed,bias_delta)));
 
 
     }         

@@ -1,7 +1,9 @@
 #define GPU_OPTIMIZATION
 #include "ADAM.cxx"
+#include "GD.cxx"
 #include "Adagrad.cxx"
 #include "Adadelta.cxx"
+#include "RMSProp.cxx"
 #include "Venio\Venio.hxx"
 #include <iostream>
 
@@ -29,8 +31,6 @@
 
 int main()
 {
-
-
     /*Matrixd a(1, 1);
     a.setConstant(0.1);
     Matrixd b(1, 1);
@@ -42,18 +42,15 @@ int main()
     Eigen::setNbThreads(2);
 
 
-    LogisticFunction logistic; // pass
-
+    LogisticFunction logistic;
     LinearFunction linear;
     SquareErrorFunction square;
 
     std::vector<std::shared_ptr<Layer>> layers{
         std::make_shared<SequentialLayer>(4000, &linear),
-        std::make_shared<SequentialLayer>(5000, &logistic),
+        std::make_shared<SequentialLayer>(5, &logistic),
         std::make_shared<SequentialLayer>(1, &linear),
     };
-
-
 
 
     Model network(&square, layers);
@@ -66,21 +63,21 @@ int main()
 
     network.setInput(a);
 
-    BFGS f(network);
+    Adadelta f(network);
     //Adadelta f(network);
 
     int epoch = 0;
 
 
-    auto t = clock();
+    
 
     while (true)
     {
-        
+        auto t = clock();
         network.forwardPropogation();
         network.backPropogation(b);
-        f.updateWeights(0.005, epoch);
-        std::cout << network.getOutput() << "\n";
+        f.updateWeights(0.1, epoch);
+        std::cout << network.getOutput()  <<"    "<< clock() - t << "\n";
 
         if(network.getAverageLoss(b) < 0.00000000001)
         {

@@ -10,7 +10,6 @@ ADAM::~ADAM()
 
 void ADAM::updateWeights(double learning_speed, double epoch)
 {
-    std::cout << epoch << "\n";
     for (int i = 0; i < _network.getLayersSize(); i++)
     {
         _modified_gamma_epoch = 1 - pow(_gamma, epoch + 1);
@@ -46,26 +45,26 @@ void ADAM::updateWeights(double learning_speed, double epoch)
 #endif
 
 #ifdef GPU_OPTIMIZATION
-        _history_speed_weights[i] = K::sum(K::scalarMultiply(_history_speed_weights[i], _gamma), K::scalarMultiply(_weights_gradient, _modified_gamma));
+        _history_speed_weights[i] = K::sumMM(K::multMS(_history_speed_weights[i], _gamma), K::multMS(_weights_gradient, _modified_gamma));
 
-        _history_moment_weights[i] = K::sum(K::scalarMultiply(_history_moment_weights[i], _alfa), K::scalarMultiply(_weights_gradient_squared, _modified_alfa));
+        _history_moment_weights[i] = K::sumMM(K::multMS(_history_moment_weights[i], _alfa), K::multMS(_weights_gradient_squared, _modified_alfa));
 
-        Arrayd _history_speed_weights_corrected = K::scalarDivide(_history_speed_weights[i], _modified_gamma_epoch);
+        Arrayd _history_speed_weights_corrected = K::divMS(_history_speed_weights[i], _modified_gamma_epoch);
 
-        Arrayd _history_moment_weights_corrected = K::scalarDivide(_history_moment_weights[i], _modified_alfa_epoch).array().sqrt() + _epsilon;
+        Arrayd _history_moment_weights_corrected = K::sumAS(K::sqrtA(K::divMS(_history_moment_weights[i], _modified_alfa_epoch).array()), _epsilon);
 
-        _network.setLayerWeights(i, K::sub(_network.getLayerWeights(i),K::scalarMultiply(K::divideArrays(_history_speed_weights_corrected, _history_moment_weights_corrected), learning_speed)));
+        _network.setLayerWeights(i, K::subMM(_network.getLayerWeights(i),K::multAS(K::divAA(_history_speed_weights_corrected, _history_moment_weights_corrected), learning_speed).matrix()));
 
 
-        _history_speed_bias[i] = K::sum(K::scalarMultiply(_history_speed_bias[i], _gamma), K::scalarMultiply(_bias_gradient, _modified_gamma));
+        _history_speed_bias[i] = K::sumMM(K::multMS(_history_speed_bias[i], _gamma), K::multMS(_bias_gradient, _modified_gamma));
 
-        _history_moment_bias[i] = K::sum(K::scalarMultiply(_history_moment_bias[i], _alfa), K::scalarMultiply(_bias_gradient_squared, _modified_alfa));
+        _history_moment_bias[i] = K::sumMM(K::multMS(_history_moment_bias[i], _alfa), K::multMS(_bias_gradient_squared, _modified_alfa));
 
-        Arrayd _history_speed_bias_corrected = K::scalarDivide(_history_speed_bias[i], _modified_gamma_epoch);
+        Arrayd _history_speed_bias_corrected = K::divMS(_history_speed_bias[i], _modified_gamma_epoch);
 
-        Arrayd _history_moment_bias_corrected = K::scalarDivide(_history_moment_bias[i], _modified_alfa_epoch).array().sqrt() + _epsilon;
+        Arrayd _history_moment_bias_corrected = K::sumAS(K::sqrtA(K::divMS(_history_moment_bias[i], _modified_alfa_epoch).array()),_epsilon);
 
-        _network.setLayerBias(i, K::sub(_network.getLayerBias(i), K::scalarMultiply(K::divideArrays(_history_speed_bias_corrected, _history_moment_bias_corrected), learning_speed)));
+        _network.setLayerBias(i, K::subMM(_network.getLayerBias(i), K::multAS(K::divAA(_history_speed_bias_corrected, _history_moment_bias_corrected), learning_speed).matrix()));
 #endif
     }
 

@@ -10,8 +10,8 @@ void GD::updateWeights(double learning_speed, double epoch)
 #endif
 
 #ifdef GPU_OPTIMIZATION
-        _network.setLayerWeights(i, K::sub(_network.getLayerWeights(i), K::scalarMultiply(_network.getLayerWeightsGradient(i), learning_speed)));
-        _network.setLayerBias(i, K::sub(_network.getLayerBias(i), K::scalarMultiply(_network.getLayerBiasGradient(i), learning_speed)));
+        _network.setLayerWeights(i, K::subMM(_network.getLayerWeights(i), K::multMS(_network.getLayerWeightsGradient(i), learning_speed)));
+        _network.setLayerBias(i, K::subMM(_network.getLayerBias(i), K::multMS(_network.getLayerBiasGradient(i), learning_speed)));
 #endif
     }
 }
