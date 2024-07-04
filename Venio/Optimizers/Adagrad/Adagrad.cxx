@@ -5,7 +5,7 @@ void Adagrad::updateWeights(double learning_speed, double epoch)
 
 #ifdef CPU_OPTIMIZATION
 
-    for(int i = 0;i < _network.getLayersSize();++i)
+    for(int i = 1;i < _network.getLayersSize();++i)
     {
 
         gradient = _network.getLayerWeightsGradient(i);
@@ -22,7 +22,7 @@ void Adagrad::updateWeights(double learning_speed, double epoch)
 
 #ifdef GPU_OPTIMIZATION
 
-    for (int i = 0; i < _network.getLayersSize(); ++i)
+    for (int i = 1; i < _network.getLayersSize(); ++i)
     {
 
         gradient = _network.getLayerWeightsGradient(i);

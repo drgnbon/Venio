@@ -13,7 +13,7 @@ public:
         _squared_bias_gradient = new Matrixd[network.getLayersSize()];
         _squared_bias_updates = new Matrixd[network.getLayersSize()];
 
-        for(int i  =0;i < network.getLayersSize();++i)
+        for(int i  = 1;i < network.getLayersSize();++i)
         {
             _squared_updates[i] = _network.getLayerWeights(i);;
             _squared_gradient[i] = _network.getLayerWeights(i);;

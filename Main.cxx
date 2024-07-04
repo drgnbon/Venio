@@ -1,9 +1,9 @@
-#define GPU_OPTIMIZATION
+#define CPU_OPTIMIZATION
 #include "ADAM.cxx"
 #include "GD.cxx"
-#include "Adagrad.cxx"
+#include "BFGS.cxx"
 #include "Adadelta.cxx"
-#include "RMSProp.cxx"
+#include "Adagrad.cxx"
 #include "Venio\Venio.hxx"
 #include <iostream>
 
@@ -26,7 +26,7 @@
 // To Do
 
 
-
+//34000
 
 
 int main()
@@ -39,7 +39,7 @@ int main()
     Kernel::sum(a, b);*/
 
     //BenchMark::benchSequentialLayer();
-    Eigen::setNbThreads(2);
+    Eigen::setNbThreads(12);
 
 
     LogisticFunction logistic;
@@ -47,14 +47,14 @@ int main()
     SquareErrorFunction square;
 
     std::vector<std::shared_ptr<Layer>> layers{
-        std::make_shared<SequentialLayer>(4000, &linear),
-        std::make_shared<SequentialLayer>(5, &logistic),
+        std::make_shared<SequentialLayer>(30000, &linear),
+        std::make_shared<SequentialLayer>(10000, &logistic),
         std::make_shared<SequentialLayer>(1, &linear),
     };
 
 
     Model network(&square, layers);
-    Matrixd a(1, 4000);
+    Matrixd a(1, 30000);
     a.setConstant(0.1);
     Matrixd b(1, 1);
     b.setConstant(0.1);
@@ -63,7 +63,7 @@ int main()
 
     network.setInput(a);
 
-    Adadelta f(network);
+    GD f(network);
     //Adadelta f(network);
 
     int epoch = 0;
@@ -76,7 +76,7 @@ int main()
         auto t = clock();
         network.forwardPropogation();
         network.backPropogation(b);
-        f.updateWeights(0.1, epoch);
+        f.updateWeights(0.2, epoch);
         std::cout << network.getOutput()  <<"    "<< clock() - t << "\n";
 
         if(network.getAverageLoss(b) < 0.00000000001)

@@ -27,15 +27,15 @@ namespace Kernel
 
     Matrixd emultMM(const Matrixd& a, const Matrixd& b);
 
-    Matrixd multMS(double s, Matrixd a);
-    Matrixd multMS(Matrixd a, double s);
+    Matrixd multMS(double S, const Matrixd& A);
+    Matrixd multMS(const Matrixd& A, double S);
 
     Matrixd divMS(const Matrixd& a, double s);
     Matrixd divMS(double s, const Matrixd& a);
 
     Matrixd sumMM(const Matrixd& a, const Matrixd& b);
 
-    Matrixd subMM(const Matrixd& a, const Matrixd& b);
+    Matrixd subMM(const Matrixd& A, const Matrixd& B);
 
     Matrixd transposeM(const Matrixd& a); 
     
@@ -46,9 +46,15 @@ namespace Kernel
 
 
     //Only vector{
-    double dotVV(Vectord a, Vectord b);
+    Vectord multVS(const Vectord& A, double S);
+    Vectord multVS(double S, const Vectord& A);
 
-    Vectord transposeV(const Vectord& a);
+    Vectord subVV(const Vectord& A, const Vectord& B);
+
+
+    double dotVV(const Vectord& a, const Vectord& b);
+
+    Matrixd transposeV(const Eigen::MatrixXd& A);//shit from Eigen,there need be Vector!!!But Eigen think else
 
     Matrixd multVV(const Vectord& a, const Vectord& b);
     // -------- }
@@ -72,7 +78,8 @@ namespace Kernel
     Arrayd divAA(const Arrayd& a, const Arrayd& b);
     // -------- }
 
- 
+    Vectord multMV(const Matrixd& A, const Vectord& B);
+    Vectord multVM(const Vectord& A, const Matrixd& B);
     //others{
     // -------- }
 };
