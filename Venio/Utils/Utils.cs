@@ -79,6 +79,41 @@ namespace Venio.Venio
                 return this;
             }
 
+            public MathBuilder Subtract(ReadOnlySpan<double> other)
+            {
+                for (int i = 0; i < _length; i++)
+                    _buffer[i] -= other[i];
+                return this;
+            }
+
+            public MathBuilder Scale(double scalar)
+            {
+                for (int i = 0; i < _length; i++)
+                    _buffer[i] *= scalar;
+
+                return this;
+            }
+            public double Sum()
+            {
+                double sum = 0;
+                for (int i = 0; i < _length; i++)
+                    sum += _buffer[i];
+                return sum;
+            }
+            public MathBuilder Square()
+            {
+                for (int i = 0; i < _length; i++)
+                    _buffer[i] *= _buffer[i];
+
+                return this;
+            }
+
+            public double Mean()
+            {
+                return Sum() / _length;
+            }
+
+
             public double[] Result
             {
                 get
