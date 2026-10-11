@@ -15,12 +15,21 @@ namespace Venio.Venio.Layers
             throw new NotImplementedException();
         }
 
-        public override void ForwardPropogate(double[] lastOutput)
+        public override void ForwardPropogate(double[] input)
         {
+
+            ArgumentNullException.ThrowIfNull(input);
+
+            if (input.Length != InputSize)
+            {
+                throw new ArgumentException(
+                    $"This layer expects {InputSize} input values, but received {input.Length}.",
+                    nameof(input));
+            }
 
             //add without allocation method
             values = Utils.MathBuilder
-                .From(lastOutput)
+                .From(input)
                 .Mult(weights)
                 .Add(bias)
                 .Result;

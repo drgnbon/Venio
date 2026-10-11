@@ -15,7 +15,7 @@ namespace Venio.Venio.Layers
 
         public ActivationFunction activationFunction;
 
-        public abstract void ForwardPropogate(double[] last_layer_output);
+        public abstract void ForwardPropogate(double[] input);
         public abstract void BackPropogate(
             double[] nextDerivation,
             double[] nextValues,
@@ -24,32 +24,42 @@ namespace Venio.Venio.Layers
 
         public Layer(int inputSize, int outputSize , ActivationFunction activationFunction)
         {
-            this.InputSize = inputSize;
-            this.OutputSize = outputSize;
+            if (inputSize < 0)
+                throw new ArgumentOutOfRangeException(nameof(inputSize), "Input size cannot be negative.");
+
+            if (outputSize <= 0)
+                throw new ArgumentOutOfRangeException(nameof(outputSize), "Output size must be greater than zero.");
+
+            ArgumentNullException.ThrowIfNull(activationFunction);
+
+            InputSize = inputSize;
+            OutputSize = outputSize;
             this.activationFunction = activationFunction;
 
-            this.bias = new double[inputSize];
-            this.biasGrad = new double[inputSize];
-            this.weights = new double[inputSize*outputSize];
-            this.weightsGrad = new double[inputSize*outputSize];
+            bias = new double[OutputSize];
+            biasGrad = new double[OutputSize];
 
-            this.values = new double[inputSize];
-            this.activeValues = new double[inputSize];
-            this.valuesGrad = new double[inputSize];
+            weights = new double[checked(InputSize * OutputSize)];
+            weightsGrad = new double[weights.Length];
 
+            values = new double[OutputSize];
+            activeValues = new double[OutputSize];
+            valuesGrad = new double[OutputSize];
 
-            Utils.FillRandom(bias.AsSpan(), 0d, 1d);
-            Utils.FillRandom(weights.AsSpan(), 0d, 1d);
-            Utils.FillZero(biasGrad.AsSpan());
-            Utils.FillZero(weightsGrad.AsSpan());
-            Utils.FillZero(values.AsSpan());
-            Utils.FillZero(activeValues.AsSpan());
-            Utils.FillZero(valuesGrad.AsSpan());
+            if (InputSize > 0)
+            {
+                Utils.FillRandom(bias.AsSpan(), 0d, 1d);
+                Utils.FillRandom(weights.AsSpan(), 0d, 1d);
+            }
         }
 
         public void Activate()
         {
-            activationFunction.Activate(values, activeValues);
+            if (!activationFunction.Activate(values, activeValues))
+            {
+                throw new InvalidOperationException(
+                    $"Activation function expected arrays of equal length ({OutputSize}).");
+            }
         }
 
     }

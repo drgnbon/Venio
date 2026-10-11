@@ -7,16 +7,26 @@ namespace Venio.Venio.Layers
 {
     internal sealed class InputLayer : Layer
     {
-        public InputLayer(int length, ActivationFunction activationFunction)
-            : base(0, length, activationFunction) { }
+        public InputLayer(int length)
+            : base(0, length, new Identity()) { }
         public override void BackPropogate(double[] nextDerivation, double[] nextValues, double[] nextWeights, double[] last_active_values)
         {
             throw new NotImplementedException();
         }
 
-        public override void ForwardPropogate(double[] last_layer_output)
+        public override void ForwardPropogate(double[] input)
         {
-            throw new NotImplementedException();
+            ArgumentNullException.ThrowIfNull(input);
+
+            if (input.Length != OutputSize)
+            {
+                throw new ArgumentException(
+                    $"Input layer expects {OutputSize} input values, but received {input.Length}.",
+                    nameof(input));
+            }
+
+            Array.Copy(input, values, OutputSize);
+            Activate();
         }
     }
 }
