@@ -6,7 +6,9 @@ public class Program
     public static void Main(string[] args)
     {
 
-        //Layer
+        //Activation function ++ 
+        //Layer ++
+        //Loss function
         //Model
         //convention
         //optimizer
