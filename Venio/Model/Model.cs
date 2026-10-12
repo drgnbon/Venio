@@ -17,19 +17,33 @@ namespace Venio.Venio.Model
         private double[] _last_right_answer;
 
 
-        private Model(ILossFunction lossFunction,List<Layer> layers)
+        private Model(ILossFunction lossFunction, List<Layer> layers)
         {
             this.lossFunction = lossFunction;
             this.layers = layers;
         }
 
+        public void ForwardPropogate()
+        {
+            for (int i = 1; i < layers.Count; ++i)
+            {
+                layers[i].ForwardPropogate(layers[i - 1].ActiveValues);
+            }
+        }
+
+
+
         public class ModelBuilder
         {
             ILossFunction lossFunction;
             List<Layer> layers;
-            public ModelBuilder()
+            private ModelBuilder()
             {
                 layers = new List<Layer>();
+            }
+            public static ModelBuilder Create()
+            {
+                return new ModelBuilder();
             }
             public ModelBuilder SequentialLayer(int length, ActivationFunction activationFunction)
             {
@@ -52,7 +66,7 @@ namespace Venio.Venio.Model
             {
                 lossFunction = type switch
                 {
-                    LossType.Square =>  new SquareLoss(),
+                    LossType.Square => new SquareLoss(),
                     _ => throw new ArgumentException("Unknown loss function")
                 };
                 return this;
@@ -61,5 +75,6 @@ namespace Venio.Venio.Model
             {
                 return new Model(lossFunction, layers);
             }
+        }
     }
 }

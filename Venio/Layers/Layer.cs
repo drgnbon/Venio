@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using Venio.Venio.ActivationFunctions;
 
@@ -12,6 +13,9 @@ namespace Venio.Venio.Layers
         protected double[] bias, biasGrad;
         protected double[] values, activeValues, valuesGrad;
         protected double[] weights, weightsGrad;
+
+
+        public double[] ActiveValues{  get => activeValues;set => activeValues = value; }
 
         public ActivationFunction activationFunction;
 
