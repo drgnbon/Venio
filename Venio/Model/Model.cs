@@ -4,6 +4,7 @@ using System.Text;
 using Venio.Venio.ActivationFunctions;
 using Venio.Venio.Layers;
 using Venio.Venio.LossFunctions;
+using Venio.Venio.Optimizers;
 
 namespace Venio.Venio.Model
 {
@@ -11,16 +12,27 @@ namespace Venio.Venio.Model
     {
 
         private ILossFunction lossFunction;
+        private IOptimizer optimizer;
         private List<Layer> layers;
         public int Size { get; }
 
         private double[] _last_right_answer;
 
 
-        private Model(ILossFunction lossFunction, List<Layer> layers)
+        private Model(
+            List<Layer> layers, 
+            ILossFunction lossFunction = null, 
+            IOptimizer optimizer = null
+        )
         {
+            if (lossFunction == null) 
+                lossFunction = new SquareLoss();
+            if (optimizer == null)
+                optimizer = new GD();
+
             this.lossFunction = lossFunction;
             this.layers = layers;
+            this.optimizer = optimizer;
         }
 
         public void ForwardPropogate()
@@ -36,6 +48,7 @@ namespace Venio.Venio.Model
         public class ModelBuilder
         {
             ILossFunction lossFunction;
+            IOptimizer optimizer;
             List<Layer> layers;
             private ModelBuilder()
             {
@@ -62,6 +75,12 @@ namespace Venio.Venio.Model
                 return this;
             }
 
+            public ModelBuilder Optimizer(IOptimizer optimizer)
+            {
+                this.optimizer = optimizer;
+                return this;
+            }
+
             public ModelBuilder LossFunction(LossType type)
             {
                 lossFunction = type switch
@@ -73,7 +92,7 @@ namespace Venio.Venio.Model
             }
             public Model Build()
             {
-                return new Model(lossFunction, layers);
+                return new Model(layers, lossFunction, optimizer);
             }
         }
     }

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Venio")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d39ecd96511910ff2e7e57ea047479469ba7d011")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f472d3c48eba7641c83970943c5cdb9d9666b47d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Venio")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Venio")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
